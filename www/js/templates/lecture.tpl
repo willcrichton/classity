@@ -6,7 +6,7 @@
           <ul class="nav nav-tabs" data-tabs="tabs">
             <li class="active"><a href="#video" data-toggle="tab">Video</a></li>
             <li><a href="#whiteboard" data-toggle="tab">Whiteboard</a></li>
-            <li><a href="#presentation" data-toggle="tab">Presentation</a></li>
+            <li><a href="#presentation" data-toggle="tab">Slides</a></li>
           </ul>
 
           <div id="notification"><span>Notice</span>: you have pending questions/answers.</div>
@@ -15,11 +15,12 @@
             <div class="tab-pane active" id="video"></div>
             <div class="tab-pane" id="whiteboard"><canvas width="919" height="465"></canvas></div>
             <div class="tab-pane" id="presentation">
-              <iframe id = "slideShowFrame" class="col-md-10"></iframe>  
+              <div class="row">
+                <iframe id = "slideShowFrame" class="col-md-10"></iframe>  
+              </div>
               <div id = "ssbuttons">
                 <button type="button" id="prev" class="btn">Previous</button> 
                 <button type="button" id="next" class="btn">Next</button>
-                <!-- <button type="button" id="pickNew" class="btn">Pick New File</button>  This needs to be right aligned-->
               </div>
             </div>
           </div>

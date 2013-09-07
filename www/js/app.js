@@ -98,5 +98,9 @@ define(function(require){
             state.trigger('notification');
         });
 
+        socket.on('updatePresentation', function(url) {
+            state.set('SSUrl', url);
+        });
+
     });
 });

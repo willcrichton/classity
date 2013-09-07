@@ -22,12 +22,11 @@ define(function(require) {
 
         newRoom: function() {
             this.state.set('name', this.$('#name').val());
-            socket.emit('newRoom', {username: this.$('#name').val()});
+            socket.emit('newRoom', {username: this.$('#name').val(), presentation: this.presentation});
             console.log('creating a room');
         },
 
         join: function() {
-            //socket.emit('joinRoom', this.$('#id').val());
             this.router.navigate(this.$('#id').val(), {trigger: true});
             console.log('joining a room');
         },
@@ -40,9 +39,8 @@ define(function(require) {
                 clientId: "2999561058",
                 buttonEl: this.$('#pick')[0],
                 onSelect: (function(file) {
-                    this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-yes"></i>');
-                    var url = file.embedLink + "#slide=5";
-                    console.log(url);
+                    this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-ok"></i>');
+                    this.presentation = file.embedLink;
                 }).bind(this)
             }); 
 

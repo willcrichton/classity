@@ -13,6 +13,8 @@ define(function(require) {
         events: {
             'click #name-update' : 'updateName',
             'click .nav-tabs a'  : 'updateTab',
+            'click #next'        : 'nextSlide',
+            'click #prev'        : 'prevSlide',
             'submit #chatbox'    : 'chat'
         },
 
@@ -25,6 +27,7 @@ define(function(require) {
             this.listenTo(this.state, 'change:tab', this.changeTab);
             this.listenTo(this.state, 'change:lastMessage', this.onChat);
             this.listenTo(this.state, 'notification', this.notification);
+            this.listenTo(this.state, 'change:SSUrl', this.changeSlide);
         },
 
         updateClients: function() {
@@ -276,6 +279,14 @@ define(function(require) {
 
         },
 
+        initPresentation: function() {
+            if (this.state.get('SSUrl')) {
+                this.$('iframe').attr('src', this.state.get('SSUrl'));
+            } else {
+                $('#presentation, a[href=#presentation]').hide();
+            }
+        },
+
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
                 this.$('#join-lecture').modal();
@@ -325,6 +336,18 @@ define(function(require) {
             this.$('#notification').show();
         },
 
+        nextSlide: function() {
+            socket.emit('advanceSlide', 1);
+        },
+
+        prevSlide: function() {
+            socket.emit('advanceSlide', -1);
+        },
+
+        changeSlide: function() {
+            this.$('iframe').attr('src', this.state.get('SSUrl'));
+        },
+
         render: function() {
             this.$el.html(this.template());
 
@@ -334,6 +357,7 @@ define(function(require) {
 
             this.initVideo();
             this.initWhiteboard();
+            this.initPresentation();
             this.updateClients();
 
             this.controlsView = new ControlsView({
