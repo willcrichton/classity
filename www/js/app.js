@@ -35,7 +35,7 @@ define(function(require){
         var r = new Router({state: state});
         Backbone.history.start();
 
-        socket.on('joinRoom', (function(info) {
+        socket.on('joinedRoom', (function(info) {
             state.set(info);
             router.navigate(info.id);
         }));

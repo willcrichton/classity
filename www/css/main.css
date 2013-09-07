@@ -8734,8 +8734,8 @@ a.list-group-item.color4 > .list-group-item-heading {
 }
 @font-face {
   font-family: 'derivia';
-  src: url('derivia-webfont.eot');
-  src: url('derivia-webfont.eot?#iefix') format('embedded-opentype'), url('derivia-webfont.woff') format('woff'), url('derivia-webfont.ttf') format('truetype'), url('derivia-webfont.svg#deriviaregular') format('svg');
+  src: url('../fonts/derivia-webfont.eot');
+  src: url('../fonts/derivia-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/derivia-webfont.woff') format('woff'), url('../fonts/derivia-webfont.ttf') format('truetype'), url('../fonts/derivia-webfont.svg#deriviaregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -8744,4 +8744,17 @@ h1 {
 }
 .logo h1 {
   font-size: 48px;
+}
+.shout {
+  background: url('../classroom.jpg') no-repeat center center;
+  height: 300px;
+}
+.shout .bg {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  margin-top: 30px;
+}
+.shout h1 {
+  margin-top: 0;
+  font-size: 72px;
 }
