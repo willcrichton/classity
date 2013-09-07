@@ -1,9 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var 
-    Backbone = require('Backbone'),
-    $        = require('jQuery');
+    var Backbone = require('Backbone');
 
     return Backbone.Router.extend({
         routes: {
@@ -20,8 +18,8 @@ define(function(require) {
                 this.currentView.remove();
             }
 
-            var view = new View(id);
-            $('#content').html(view.render().el);
+            var view = new View({id: id});
+            $('#container').html(view.render().el);
             this.currentView = view;
 
             this.trigger('changeView');
