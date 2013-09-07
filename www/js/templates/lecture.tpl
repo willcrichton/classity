@@ -12,7 +12,14 @@
           <div class="tab-content">
             <div class="tab-pane active" id="video"></div>
             <div class="tab-pane" id="whiteboard"><canvas width="634" height="400"></canvas></div>
-            <div class="tab-pane" id="presentation"></div>
+            <div class="tab-pane" id="presentation">
+              <iframe id = "slideShowFrame" class="col-md-10"></iframe>  
+              <div id = "ssbuttons">
+                <button type="button" id="prev" class="btn">Previous</button> 
+                <button type="button" id="next" class="btn">Next</button>
+                <!-- <button type="button" id="pickNew" class="btn">Pick New File</button>  This needs to be right aligned-->
+              </div>
+            </div>
           </div>
 
           <div id="controls"></div>

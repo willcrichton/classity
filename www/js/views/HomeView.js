@@ -47,6 +47,19 @@ define(function(require) {
                 }
             }); 
 
+            //SECOND BUTTON?
+            // var picker2 = new FilePicker({
+            //     apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
+            //     clientId: "2999561058",
+            //     buttonEl: this.$('#pickNew')[0],
+            //     onSelect: function(file) {
+
+            //         url = file.embedLink + "#slide=";
+            //         socket.emit("setSlideShowUrl", url);
+            //         //Should pass file embed link to server.
+            //     }
+            // }); 
+
             //Specification: Proffessor will select slideshow, the frontend will send the url and the slide # to the backend
             //the backend will run the update function that makes everybody's Iframes show the correct slideshow and frame.
             //The proffessors prev and next buttons should also tell the backend to increment or decrement the backend slide 
@@ -61,3 +74,4 @@ define(function(require) {
         }
     });
 });
+
