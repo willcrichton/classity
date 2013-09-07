@@ -10,7 +10,8 @@ define(function(require) {
         id: 'lecture',
 
         events: {
-            'click #name-update' : 'updateName'
+            'click #name-update' : 'updateName',
+            'click .nav-tabs a'  : 'updateTab'
         },
 
         initialize: function(options) {
@@ -19,6 +20,7 @@ define(function(require) {
             
             this.listenTo(this.state, 'change:clients', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
+            this.listenTo(this.state, 'change:tab', this.changeTab);
         },
 
         updateClients: function() {
@@ -28,7 +30,7 @@ define(function(require) {
                     return;
                 }
 
-                this.$('#clients').append('<li>' + client + '</li>');
+                this.$('#clients').append('<li class="list-group-item">' + client + '</li>');
             }, this);
         },
 
@@ -73,13 +75,10 @@ define(function(require) {
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
 
-            var publisher = TB.initPublisher(apiKey, 'video', {
-                width: 750, height: 562
-            });
-            
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
                     socket.emit('videoId', session.connection.connectionId);
+                    session.publish('video');
                 }
                 subscribeToStreams.call(this, event.streams);
             }
@@ -90,7 +89,7 @@ define(function(require) {
 
             function subscribeToStreams(streams) {
                 _.forEach(streams, function(stream) {
-                    if (stream.connection.connectionId == this.state.get('profVideo')) {
+                    if (stream.connection.connectionId == this.state.get('profVideo') && !this.state.get('admin')) {
                         session.subscribe(stream, 'video');
                     }
                 }, this);
@@ -112,10 +111,20 @@ define(function(require) {
             socket.emit('joinRoom', this.state.get('id'), this.$('.modal input[type=text]').val());
         },
 
+        // for when professor clicks a tab, send event to students
+        updateTab: function(e) {
+            if (this.state.get('admin')) {
+                socket.emit('changeTab', $(e.target).attr('href').replace('#', ''));
+            }
+        },
+
+        // for when we receive tab change from professor
+        changeTab: function() {
+            this.$('.nav-tabs a[href=#' + this.state.get('tab') + ']').tab('show');
+        },
+
         render: function() {
             this.$el.html(this.template());
-
-            this.$('.nav-tabs').tab();
 
             if (!this.checkPermissions()) {
                 return this;
@@ -124,6 +133,8 @@ define(function(require) {
             this.initVideo();
             this.initWhiteboard();
             this.updateClients();
+
+            this.$('.nav-tabs').tab();
 
             return this;
         }

@@ -8751,6 +8751,13 @@ h1 {
   margin-top: 10px;
   text-shadow: 1px 1px 2px black;
 }
+.logo h1 a {
+  text-decoration: none;
+  color: white;
+}
+.logo h1 a:hover {
+  text-shadow: 1px 1px 4px black;
+}
 .shout {
   background: url('../classroom.jpg') no-repeat center center;
   height: 250px;
@@ -8758,12 +8765,20 @@ h1 {
 }
 .shout .bg {
   background: -webkit-radial-gradient(300px center, ellipse farthest-corner, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%);
-  padding: 20px;
-  margin-top: 40px;
+  padding: 30px;
+  margin-top: 30px;
 }
 .shout h1 {
   margin-top: 0;
   font-size: 80px;
+}
+.panel {
+  height: 600px;
+}
+.panel .col-md-8 {
+  height: 570px;
+  border-right: 1px solid #999;
+  margin-right: -1px;
 }
 canvas {
   width: 100%;

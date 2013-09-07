@@ -17,6 +17,7 @@ define(function(require) {
         initialize: function(options) {
             this.template = _.template(template);
             this.state = options.state;
+            this.router = options.router;
         },
 
         newRoom: function() {
@@ -26,7 +27,8 @@ define(function(require) {
         },
 
         join: function() {
-            socket.emit('joinRoom', {id: this.$('#id').val()});
+            //socket.emit('joinRoom', this.$('#id').val());
+            this.router.navigate(this.$('#id').val(), {trigger: true});
             console.log('joining a room');
         },
 

@@ -33,13 +33,17 @@ define(function(require){
                     id: '',
                     clients: [],
                     auth: false,
-                    profVideo: ''
+                    profVideo: '',
+                    tab: ''
                 }
             }
         }))();
 
         var router = new Router({state: state});
-        Backbone.history.start();
+
+        $(document).ready(function() {
+            Backbone.history.start();
+        });
 
         socket.on('joinedRoom', function(info) {
             console.log('joinedRoom', info);
@@ -54,9 +58,21 @@ define(function(require){
             state.trigger('change:clients');
         });
 
+        socket.on('clientsLeft', function(username) {
+            console.log('clientsLeft', username);
+            var clients = state.get('clients');
+            clients.splice(clients.indexOf(username), 1);
+            state.set('clients', clients);
+            state.trigger('change:clients');
+        });
+
         socket.on('profVideo', function(id) {
             console.log('profVideo', id);
             state.set('profVideo', id);
+        });
+
+        socket.on('changeTab', function(tab) {
+            state.set('tab', tab);
         });
     });
 });

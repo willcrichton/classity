@@ -41,13 +41,13 @@ function usernames(id) {
 
 function profVideo(id) {
     var sockets = io.sockets.clients(id);
-    var id;
+    var video;
     _.forEach(sockets, function(socket) {
         if (socket.admin) {
-            id = socket.videoId;
+            video = socket.videoId;
         }
     });
-    return id;
+    return video;
 }
 
 
@@ -78,12 +78,18 @@ io.sockets.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('Someone left');
         var id = socket.room;
-        socket.broadcast.to(id).emit('clientsChanged', usernames(id));
+
+        // clientsLeft instead of changes b/c at this point socket list still includes leaver
+        socket.broadcast.to(id).emit('clientsLeft', socket.username);
     });
 
     socket.on('videoId', function(id) {
         socket.broadcast.to(socket.room).emit('profVideo', id);
         socket.videoId = id;
+    });
+
+    socket.on('changeTab', function(tab) {
+        socket.broadcast.to(socket.room).emit('changeTab', tab);
     });
 
     tabs.forEach(function(tab) {

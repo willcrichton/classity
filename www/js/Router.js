@@ -19,7 +19,7 @@ define(function(require) {
                 this.currentView.remove();
             }
 
-            var view = new View({id: id, state: this.state});
+            var view = new View({id: id, state: this.state, router: this});
             $('#container').html(view.render().el);
             this.currentView = view;
 
