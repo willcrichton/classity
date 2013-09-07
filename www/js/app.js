@@ -27,4 +27,9 @@ define(function(require){
             'Backbone'   : 'vendor/backbone-min'
         }
     });
+
+    require(['Router'], function(Router) {
+        var r = new Router();
+        Backbone.history.start();
+    });
 });
