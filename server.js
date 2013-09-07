@@ -53,9 +53,12 @@ function profVideo(id) {
 
 function join(socket, admin) {
     return function(id, username) {
+        if(!admin && io.sockets.clients('room').length === 0) {
+            socket.emit('joinedRoom', new Error('Cannot join lecture; room does not exist.'));
+        }
         socket.join(id);
         socket.room = id;
-        socket.username = username; 
+        socket.username = username;
         socket.admin = admin;
 
         console.log('Set username ' + username);

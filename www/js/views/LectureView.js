@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var 
+    var
     _        = require('Underscore'),
     Backbone = require('Backbone'),
     template = require('text!templates/lecture.tpl'),
@@ -19,7 +19,7 @@ define(function(require) {
         initialize: function(options) {
             this.template = _.template(template);
             this.state = this.options.state;
-            
+
             this.listenTo(this.state, 'change:clients', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
             this.listenTo(this.state, 'change:tab', this.changeTab);
@@ -71,7 +71,7 @@ define(function(require) {
             var apiKey = "40476162";
             var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
             var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz02NDE3YTI3YjhkMDhkNmYwMDAxOTUwZGZkYmZiODNjMTM1NjliNmFjOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtUm5KcElGTmxjQ0F3TmlBeE9Ub3hPVG94TXlCUVJGUWdNakF4TTM0d0xqVTBNemszTmpGLSZjcmVhdGVfdGltZT0xMzc4NTIwMzUzJm5vbmNlPTAuMzU2ODIwNjI1MjY5ODU1NiZleHBpcmVfdGltZT0xMzc4NjA2NzUzJmNvbm5lY3Rpb25fZGF0YT0=";
-            
+
             // Initialize session, set up event listeners, and connect
             var session = TB.initSession(sessionId);
             session.addEventListener('sessionConnected', sessionConnectedHandler.bind(this));
@@ -104,7 +104,17 @@ define(function(require) {
 
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                this.$('.modal').modal();
+                console.log('auth: ' + this.state.get('auth'));
+                if (localStorage.hasOwnProperty('info')) {
+                    console.log('we have some old data: ' + localStorage.info);
+                    var info = JSON.parse(localStorage.info);
+                    if(info.hasOwnProperty('id')) {
+                        this.state.set(info);
+                        socket.emit('joinRoom', info.id, this.state.get('name'));
+                    }
+                } else {
+                    this.$('.modal').modal();
+                }
                 return false;
             }
 

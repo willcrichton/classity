@@ -50,6 +50,7 @@ define(function(require){
             console.log('joinedRoom', info);
             state.set(info);
             state.set('auth', true);
+            localStorage.info = JSON.stringify(info);
             router.navigate(info.id, {trigger: true});
         });
 
