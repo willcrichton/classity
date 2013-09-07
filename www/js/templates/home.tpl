@@ -4,7 +4,7 @@
       <h1>Real-time lectures on the web</h1>
       <div class="row">
         <div class="col-md-2">
-          <button class="btn" data-toggle="modal" href="#modal">Create a new lecture</button>
+          <button class="btn btn-success" data-toggle="modal" href="#modal"><i class="glyphicon glyphicon-plus"></i> Create a new lecture</button>
         </div>
         <div class="col-md-1" style="margin-left:60px;font-size:26px;"> OR </div>
         <div class="col-md-3">
@@ -42,11 +42,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Tweak your lecture</h4>
+        <h4 class="modal-title">Lecture settings</h4>
       </div>
       <div class="modal-body">
         <input type="text" placeholder="Your name" id="name"><br /><br />
-        If you would like to use a PowerPoint presentation, please select it in SkyDrive.
+        If you would like to use a PowerPoint presentation, please select it in SkyDrive.<br />
+        <button class="btn" id="pick">Choose PPT</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="new" data-dismiss="modal">Create</button>

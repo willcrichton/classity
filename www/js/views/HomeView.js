@@ -34,6 +34,28 @@ define(function(require) {
 
         render: function() {
             this.$el.html(this.template());
+
+            var picker = new FilePicker({
+                apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
+                clientId: "2999561058",
+                buttonEl: this.$('#pick')[0],
+                onSelect: function(file) {
+
+                    url = file.embedLink + "#slide=5"
+                    //Should pass file embed link to server.
+                }
+            }); 
+
+            //Specification: Proffessor will select slideshow, the frontend will send the url and the slide # to the backend
+            //the backend will run the update function that makes everybody's Iframes show the correct slideshow and frame.
+            //The proffessors prev and next buttons should also tell the backend to increment or decrement the backend slide 
+            //variable by one, the backend will then again run the update function. 
+
+            //All three lines should be called the first time, and then only the last line should be called on every slide update.
+            //  $('#middle').append($('<iframe id = "reload"></iframe>'));
+            //  $('#middle').append($('<div id = cover> </div>'));
+            //  $('#reload').attr("src", url);
+
             return this;
         }
     });

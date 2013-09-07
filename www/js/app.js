@@ -34,7 +34,8 @@ define(function(require){
                     clients: [],
                     auth: false,
                     profVideo: '',
-                    tab: ''
+                    tab: '',
+                    lastMessage: ''
                 }
             }
         }))();
@@ -73,6 +74,10 @@ define(function(require){
 
         socket.on('changeTab', function(tab) {
             state.set('tab', tab);
+        });
+
+        socket.on('onChat', function(username, message) {
+            state.set('lastMessage', '<b>' + username + '</b>: ' + message);
         });
     });
 });

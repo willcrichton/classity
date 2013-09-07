@@ -2,7 +2,7 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
           <ul class="nav nav-tabs" data-tabs="tabs">
             <li class="active"><a href="#video" data-toggle="tab">Video</a></li>
             <li><a href="#whiteboard" data-toggle="tab">Whiteboard</a></li>
@@ -11,12 +11,18 @@
           
           <div class="tab-content">
             <div class="tab-pane active" id="video"></div>
-            <div class="tab-pane" id="whiteboard"><canvas></canvas></div>
+            <div class="tab-pane" id="whiteboard"><canvas width="634" height="400"></canvas></div>
             <div class="tab-pane" id="presentation"></div>
           </div>
+
+          <div id="controls"></div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <h2>Chat</h2>
+          <form id="chatbox">
+            <input type="text" placeholder="Chat message">
+          </form>
+          <div id="chats"></div>
         </div>
         <div class="col-md-2">
           <h2>Clients</h2>

@@ -4,14 +4,16 @@ define(function(require) {
     var 
     _        = require('Underscore'),
     Backbone = require('Backbone'),
-    template = require('text!templates/lecture.tpl');
+    template = require('text!templates/lecture.tpl'),
+    ControlsView = require('views/ControlsView');
 
     return Backbone.View.extend({
         id: 'lecture',
 
         events: {
             'click #name-update' : 'updateName',
-            'click .nav-tabs a'  : 'updateTab'
+            'click .nav-tabs a'  : 'updateTab',
+            'submit #chatbox'    : 'chat'
         },
 
         initialize: function(options) {
@@ -21,6 +23,7 @@ define(function(require) {
             this.listenTo(this.state, 'change:clients', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
             this.listenTo(this.state, 'change:tab', this.changeTab);
+            this.listenTo(this.state, 'change:lastMessage', this.onChat);
         },
 
         updateClients: function() {
@@ -61,7 +64,7 @@ define(function(require) {
 
             paper.view.draw();
 
-            this.$('canvas').attr({width: '750', height: '400'});
+            //this.$('canvas').attr({width: '750', height: '400'});
         },
 
         initVideo: function() {
@@ -74,6 +77,8 @@ define(function(require) {
             session.addEventListener('sessionConnected', sessionConnectedHandler.bind(this));
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
+
+            //var publisher = TB.initPublisher(apiKey, 'video', {width: 750, height: 562});
 
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
@@ -123,6 +128,20 @@ define(function(require) {
             this.$('.nav-tabs a[href=#' + this.state.get('tab') + ']').tab('show');
         },
 
+        chat: function(e) {
+            var input = $(e.target).children('input');
+            socket.emit('chat', input.val());
+            this.state.set('lastMessage', '<b>' + this.state.get('name') + '</b>: ' + input.val());
+            input.val('');
+
+            return false;
+        },
+
+        onChat: function() {
+            var message = this.state.get('lastMessage');
+            this.$('#chats').append('<div>' + message + '</div>');
+        },
+
         render: function() {
             this.$el.html(this.template());
 
@@ -133,6 +152,11 @@ define(function(require) {
             this.initVideo();
             this.initWhiteboard();
             this.updateClients();
+
+            this.controlsView = new ControlsView({
+                el: this.$('#controls'),
+                state: this.state
+            });
 
             this.$('.nav-tabs').tab();
 
