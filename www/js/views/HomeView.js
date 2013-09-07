@@ -41,7 +41,8 @@ define(function(require) {
                 buttonEl: this.$('#pick')[0],
                 onSelect: function(file) {
 
-                    url = file.embedLink + "#slide=5"
+                    url = file.embedLink + "#slide=";
+                    socket.emit("setSlideShowUrl", url);
                     //Should pass file embed link to server.
                 }
             }); 
