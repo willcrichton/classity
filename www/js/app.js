@@ -27,17 +27,36 @@ define(function(require){
         window.socket = io.connect(document.baseURI);
 
         var state = new (Backbone.Model.extend({
-            defaults: {
-                admin: false
+            defaults: function() {
+                return {
+                    admin: false,
+                    id: '',
+                    clients: [],
+                    auth: false,
+                    profVideo: ''
+                }
             }
         }))();
 
-        var r = new Router({state: state});
+        var router = new Router({state: state});
         Backbone.history.start();
 
-        socket.on('joinedRoom', (function(info) {
+        socket.on('joinedRoom', function(info) {
+            console.log('joinedRoom', info);
             state.set(info);
-            router.navigate(info.id);
-        }));
+            state.set('auth', true);
+            router.navigate(info.id, {trigger: true});
+        });
+
+        socket.on('clientsChanged', function(clients) {
+            console.log('clientsChanged', clients);
+            state.set('clients', clients);
+            state.trigger('change:clients');
+        });
+
+        socket.on('profVideo', function(id) {
+            console.log('profVideo', id);
+            state.set('profVideo', id);
+        });
     });
 });

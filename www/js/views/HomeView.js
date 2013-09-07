@@ -14,12 +14,14 @@ define(function(require) {
             'click #join' : 'join'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             this.template = _.template(template);
+            this.state = options.state;
         },
 
         newRoom: function() {
-            socket.emit('newRoom', {name: this.$('#name').val()});
+            this.state.set('name', this.$('#name').val());
+            socket.emit('newRoom', {username: this.$('#name').val()});
             console.log('creating a room');
         },
 

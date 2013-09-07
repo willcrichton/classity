@@ -23,16 +23,16 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3 well">
-      <h2>Property X</h2>
-      <p>Bacon ipsum dolor sit amet est andouille et ad tail beef meatloaf incididunt cupidatat laborum fugiat. Ut doner salami turducken dolore.</p>
+      <h2>Anytime, Anywhere</h2>
+      <p>Couldn't make it to school? Guest lecturing from another continent? Classity can do remote lectures with students and teachers around the world.
     </div>
     <div class="col-md-4 col-md-offset-1 well">
-      <h2>Property Y</h2>
-      <p>Bacon ipsum dolor sit amet est andouille et ad tail beef meatloaf incididunt cupidatat laborum fugiat. Ut doner salami turducken dolore t-bone sausage tenderloin kielbasa.</p>
+      <h2>Student Interactivity</h2>
+      <p>Most virtual classrooms either lack a real teacher or true interactivity with the student. Classity offers both to keep the students involved as you teach.
     </div>
     <div class="col-md-3 col-md-offset-1 well">
-      <h2>Property Z</h2>
-      <p>Bacon ipsum dolor sit amet est andouille et ad tail beef meatloaf incididunt cupidatat laborum fugiat. Ut doner salami turducken dolore.</p>
+      <h2>Developed for Educators</h2>
+      <p>Never worry about having to use Skype or Hangouts for educational purposes again. Classity caters to your needs as a teaching professional.
     </div>
   </div>
 </div>

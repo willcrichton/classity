@@ -9,8 +9,27 @@ define(function(require) {
     return Backbone.View.extend({
         id: 'lecture',
 
+        events: {
+            'click #name-update' : 'updateName'
+        },
+
         initialize: function(options) {
             this.template = _.template(template);
+            this.state = this.options.state;
+            
+            this.listenTo(this.state, 'change:clients', this.updateClients);
+            this.listenTo(this.state, 'change:auth change:profVideo', this.render);
+        },
+
+        updateClients: function() {
+            this.$('#clients').html('');
+            _.forEach(this.state.get('clients'), function(client) {
+                if (client === this.state.get('name')) {
+                    return;
+                }
+
+                this.$('#clients').append('<li>' + client + '</li>');
+            }, this);
         },
 
         initWhiteboard: function() {
@@ -50,41 +69,61 @@ define(function(require) {
             
             // Initialize session, set up event listeners, and connect
             var session = TB.initSession(sessionId);
-            session.addEventListener('sessionConnected', sessionConnectedHandler);
-            session.addEventListener('streamCreated', streamCreatedHandler);
+            session.addEventListener('sessionConnected', sessionConnectedHandler.bind(this));
+            session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
 
             var publisher = TB.initPublisher(apiKey, 'video', {
-                width: 600, height: 450
+                width: 750, height: 562
             });
             
             function sessionConnectedHandler(event) {
-                subscribeToStreams(event.streams);
-                session.publish(publisher);
+                if (this.state.get('admin')) {
+                    socket.emit('videoId', session.connection.connectionId);
+                }
+                subscribeToStreams.call(this, event.streams);
             }
 
             function streamCreatedHandler(event) {
-                subscribeToStreams(event.streams);
+                subscribeToStreams.call(this, event.streams);
             }
 
             function subscribeToStreams(streams) {
                 _.forEach(streams, function(stream) {
-                    if (stream.connection.connectionId != session.connection.connectionId) {
-                        $('#video').append('<div id="' + stream.streamId + '"></div>');
-                        session.subscribe(stream, stream.streamId);
+                    if (stream.connection.connectionId == this.state.get('profVideo')) {
+                        session.subscribe(stream, 'video');
                     }
-                });
+                }, this);
             }
 
+        },
+
+        checkPermissions: function() {
+            if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
+                this.$('.modal').modal();
+                return false;
+            }
+
+            return true;
+        },
+
+        updateName: function() {
+            this.state.set('name', this.$('.modal input[type=text]').val());
+            socket.emit('joinRoom', this.state.get('id'), this.$('.modal input[type=text]').val());
         },
 
         render: function() {
             this.$el.html(this.template());
 
             this.$('.nav-tabs').tab();
-            
+
+            if (!this.checkPermissions()) {
+                return this;
+            }
+
             this.initVideo();
             this.initWhiteboard();
+            this.updateClients();
 
             return this;
         }

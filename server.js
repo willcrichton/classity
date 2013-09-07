@@ -36,50 +36,55 @@ function newID() {
 
 function usernames(id) {
     var sockets = io.sockets.clients(id);
-    var names = _.map(sockets , function(socket) {
-        var x;
-        socket.get('username', function(err, val) {
-            x = val;
-        });
-        return x;
+    return _.pluck(sockets, 'username');
+}
+
+function profVideo(id) {
+    var sockets = io.sockets.clients(id);
+    var id;
+    _.forEach(sockets, function(socket) {
+        if (socket.admin) {
+            id = socket.videoId;
+        }
     });
-    console.log('Names: ' + names);
-    return names;
+    return id;
 }
 
 
 function join(socket, admin) {
     return function(id, username) {
         socket.join(id);
-        socket.set('id', id);
-        socket.emit('joinedRoom', {'id':id, 'admin':admin});
-        socket.set('username', username, function() {
-            console.log('Set username ' + username);
-            socket.broadcast.to(id).emit('clientsChanged', usernames(id));
-        });
+        socket.room = id;
+        socket.username = username; 
+        socket.admin = admin;
+
+        console.log('Set username ' + username);
+        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id)});
+        socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
 }
 
 io.sockets.on('connection', function(socket) {
     console.log('Someone connected');
 
-    //socket.on('ping', function(text) {
-    //    console.log('Pinged: ' + text);
-    //});
-
-    //socket.emit('ping');
-
     socket.on('joinRoom', join(socket, false));
-    socket.on('newRoom', function() {
+
+    socket.on('newRoom', function(args) {
         var id = newID();
         console.log('New room ' + id);
-        join(socket, true)(id);
-    });
-    socket.on('disconnect', function() {
-        console.log('Someone left');
-        socket.broadcast.to(socket.get('id')).emit('clientsChanged', usernames(id));
+        join(socket, true)(id, args.username);
     });
 
+    socket.on('disconnect', function() {
+        console.log('Someone left');
+        var id = socket.room;
+        socket.broadcast.to(id).emit('clientsChanged', usernames(id));
+    });
+
+    socket.on('videoId', function(id) {
+        socket.broadcast.to(socket.room).emit('profVideo', id);
+        socket.videoId = id;
+    });
 
     tabs.forEach(function(tab) {
         tabType.init(socket);
