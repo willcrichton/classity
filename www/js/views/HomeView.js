@@ -9,9 +9,21 @@ define(function(require) {
     return Backbone.View.extend({
         id: 'home',
 
+        events: {
+            'click #new'  : 'newRoom',
+            'click #join' : 'join'
+        },
+
         initialize: function() {
             this.template = _.template(template);
-            this.render();
+        },
+
+        newRoom: function() {
+            socket.send('new');
+        },
+
+        join: function() {
+            socket.send('join', this.$('input[type=text]').val());
         },
 
         render: function() {
