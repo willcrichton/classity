@@ -1158,99 +1158,125 @@ hr {
 
 //modal
 
-.modal-dialog {
-    padding-right:0;
-    padding-left:0;
-    width:100%;
-}
+.modal {
+    color: black!important;;
+    .modal-header {
+        padding: 10px 20px;
 
-.modal-content {
-    .box-shadow(none);
-    border:none;
-    background:none;
-    width:100%;
-}
+        .modal-title {
+            font-size: 24px;
+        }
 
-.modal-header {
-    border:none;
-    width:60%;
-    margin-left:20%;
-    padding-left:0;
-    padding-right:0;
+        .close {
+            margin-top: 5px;
+        }
+    }
 
-    > .close {
-        .contrast(@modal-backdrop-bg);
-        margin-top:0;
-        .opacity(1);
-        padding:14px; //more touch-friendly
-        position:relative;
-        top:-12px;
-        right:-14px;
+    .modal-footer {
+        margin-top: 0;
+        padding: 15px 20px;
     }
 }
 
-.modal-title {
-    .contrast(@modal-backdrop-bg);
-    //text-shadow:none;
-    margin-left:0;
+.modal-backdrop.in {
+    opacity: 0.7!important;
 }
 
-.modal-body {
-    border-radius:0;
-    width:100%;
-    padding-left:20%;
-    padding-right:20%;
-    margin:0;
-
-    .modal-body-color(@color) {
-        background:@color;
-        .contrast(@color); 
-    }
-
-    .modal-body-color(@color1);
-
-    &.color1 { .modal-body-color(@color1);}
-    &.color1a { .modal-body-color(@color1a);}
-    &.color1b { .modal-body-color(@color1b);}
-    &.color1c { .modal-body-color(@color1c);}
-    &.color2 { .modal-body-color(@color2);}
-    &.color2a { .modal-body-color(@color2a);}
-    &.color2b { .modal-body-color(@color2b);}
-    &.color2c { .modal-body-color(@color2c);}
-    &.color3 { .modal-body-color(@color3);}
-    &.color3a { .modal-body-color(@color3a);}
-    &.color3b { .modal-body-color(@color3b);}
-    &.color3c { .modal-body-color(@color3c);}
-    &.color4 { .modal-body-color(@color4);}
-    &.color4a { .modal-body-color(@color4a);}
-    &.color4b { .modal-body-color(@color4b);}
-    &.color4c { .modal-body-color(@color4c);}
-}
-
-.modal-footer {
-    background:transparent;
-    margin-top:0;
-    border:none;
-    width:60%;
-    margin-left:20%;
-    padding-left:0;
-    padding-right:0;
-}
-
-.modal-backdrop {
-    background-color: @modal-backdrop-bg;
-    &.fade { .opacity(0); }
-    &.in { .opacity(1); }
-
-    &:before {
-        display:block;
-        content:"";
-        background:@modal-backdrop-bg;
+.modal-big {
+    .modal-dialog {
+        padding-right:0;
+        padding-left:0;
         width:100%;
-        height:50%;
-        position:absolute;
-        top:0;
-        left:0;
+    }
+
+    .modal-content {
+        .box-shadow(none);
+        border:none;
+        background:none;
+        width:100%;
+    }
+
+    .modal-header {
+        border:none;
+        width:60%;
+        margin-left:20%;
+        padding-left:0;
+        padding-right:0;
+
+        > .close {
+            .contrast(@modal-backdrop-bg);
+            margin-top:0;
+            .opacity(1);
+            padding:14px; //more touch-friendly
+            position:relative;
+            top:-12px;
+            right:-14px;
+        }
+    }
+
+    .modal-title {
+        .contrast(@modal-backdrop-bg);
+        //text-shadow:none;
+        margin-left:0;
+    }
+
+    .modal-body {
+        border-radius:0;
+        width:100%;
+        padding-left:20%;
+        padding-right:20%;
+        margin:0;
+
+        .modal-body-color(@color) {
+            background:@color;
+            .contrast(@color); 
+        }
+
+        .modal-body-color(@color1);
+
+        &.color1 { .modal-body-color(@color1);}
+        &.color1a { .modal-body-color(@color1a);}
+        &.color1b { .modal-body-color(@color1b);}
+        &.color1c { .modal-body-color(@color1c);}
+        &.color2 { .modal-body-color(@color2);}
+        &.color2a { .modal-body-color(@color2a);}
+        &.color2b { .modal-body-color(@color2b);}
+        &.color2c { .modal-body-color(@color2c);}
+        &.color3 { .modal-body-color(@color3);}
+        &.color3a { .modal-body-color(@color3a);}
+        &.color3b { .modal-body-color(@color3b);}
+        &.color3c { .modal-body-color(@color3c);}
+        &.color4 { .modal-body-color(@color4);}
+        &.color4a { .modal-body-color(@color4a);}
+        &.color4b { .modal-body-color(@color4b);}
+        &.color4c { .modal-body-color(@color4c);}
+    }
+
+    .modal-footer {
+        background:transparent;
+        margin-top:0;
+        border:none;
+        width:60%;
+        margin-left:20%;
+        padding-left:0;
+        padding-right:0;
+    }
+
+    .modal-backdrop {
+        background-color: @modal-backdrop-bg;
+        &.fade { .opacity(0); }
+        &.in { .opacity(1); }
+
+        &:before {
+            display:block;
+            content:"";
+            background:@modal-backdrop-bg;
+            width:100%;
+            height:50%;
+            position:absolute;
+            top:0;
+            left:0;
+        }
     }
 }
 
@@ -1272,6 +1298,7 @@ hr {
     }
 
 }
+
 
 //panel
 .panel {

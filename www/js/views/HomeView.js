@@ -22,12 +22,11 @@ define(function(require) {
 
         newRoom: function() {
             this.state.set('name', this.$('#name').val());
-            socket.emit('newRoom', {username: this.$('#name').val()});
+            socket.emit('newRoom', {username: this.$('#name').val(), presentation: this.presentation});
             console.log('creating a room');
         },
 
         join: function() {
-            //socket.emit('joinRoom', this.$('#id').val());
             this.router.navigate(this.$('#id').val(), {trigger: true});
             console.log('joining a room');
         },
@@ -39,13 +38,28 @@ define(function(require) {
                 apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
                 clientId: "2999561058",
                 buttonEl: this.$('#pick')[0],
-                onSelect: function(file) {
-
-                    url = file.embedLink + "#slide=";
-                    socket.emit("setSlideShowUrl", url);
-                    //Should pass file embed link to server.
-                }
+                onSelect: (function(file) {
+                    this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-ok"></i>');
+                    this.presentation = file.embedLink;
+                }).bind(this)
             }); 
+
+            // socket.on('updatePresentation', function(newUrl) {
+            //       $('#slideShowFrame').attr("src", newUrl);
+            // })
+
+            //SECOND BUTTON?
+            // var picker2 = new FilePicker({
+            //     apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
+            //     clientId: "2999561058",
+            //     buttonEl: this.$('#pickNew')[0],
+            //     onSelect: function(file) {
+
+            //         url = file.embedLink + "#slide=";
+            //         socket.emit("setSlideShowUrl", url);
+            //         //Should pass file embed link to server.
+            //     }
+            // }); 
 
             //Specification: Proffessor will select slideshow, the frontend will send the url and the slide # to the backend
             //the backend will run the update function that makes everybody's Iframes show the correct slideshow and frame.
@@ -61,3 +75,4 @@ define(function(require) {
         }
     });
 });
+
