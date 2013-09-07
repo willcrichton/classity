@@ -436,7 +436,10 @@ define(function(require) {
             this.$('.nav-tabs').tab();
 
             if (this.state.get('admin')) {
-                this.$('.col-md-3').hide();
+                this.$('#column-right div:first-child').hide();
+                this.$('#clients').addClass('tall');
+            } else {
+                this.$('#ssbuttons').hide();
             }
 
             return this;
