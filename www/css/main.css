@@ -8801,3 +8801,9 @@ h1 {
 canvas {
   background: white;
 }
+#slideShowFrame{
+  height: 400px;
+}
+#ssbuttons{
+  clear:both;
+}
