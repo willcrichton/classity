@@ -9,8 +9,9 @@ define(function(require) {
             ':id' : 'lecture'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             this.currentView = null;
+            this.state = options.state;
         },
 
         swapViews: function(View, id) {
@@ -18,7 +19,7 @@ define(function(require) {
                 this.currentView.remove();
             }
 
-            var view = new View({id: id});
+            var view = new View({id: id, state: this.state});
             $('#container').html(view.render().el);
             this.currentView = view;
 
@@ -31,6 +32,7 @@ define(function(require) {
         
         lecture: function(id) {
             this.swapViews(require('views/LectureView'), id);
+            this.state.set('id', id);
         }
     });
 });

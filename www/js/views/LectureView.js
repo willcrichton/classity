@@ -11,16 +11,12 @@ define(function(require) {
 
         initialize: function(options) {
             this.template = _.template(template);
-            this.render();
         },
 
         render: function() {
             this.$el.html(this.template());
 
-            this.$('.nav-tabs a').click(function(e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
+            this.$('.nav-tabs').tab();
            
             var apiKey = "40476162";
             var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
@@ -32,7 +28,9 @@ define(function(require) {
             session.addEventListener('streamCreated', streamCreatedHandler);
             session.connect(apiKey, token);
 
-            var publisher = TB.initPublisher(apiKey, 'video');
+            var publisher = TB.initPublisher(apiKey, 'video', {
+                width: 600, height: 450
+            });
             
             function sessionConnectedHandler(event) {
                 subscribeToStreams(event.streams);
@@ -46,7 +44,8 @@ define(function(require) {
             function subscribeToStreams(streams) {
                 _.forEach(streams, function(stream) {
                     if (stream.connection.connectionId != session.connection.connectionId) {
-                        session.subscribe(stream);
+                        $('#video').append('<div id="' + stream.streamId + '"></div>');
+                        session.subscribe(stream, stream.streamId);
                     }
                 });
             }

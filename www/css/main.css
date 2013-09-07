@@ -258,7 +258,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Droid Serif", Georgia, "Times New Roman", Times, serif;
   font-size: 16px;
   line-height: 1.428571429;
   color: #333333;
@@ -393,7 +393,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Droid Serif", Georgia, "Times New Roman", Times, serif;
   font-weight: 500;
   line-height: 1.1;
 }
@@ -8728,4 +8728,39 @@ a.list-group-item.color4 > .list-group-item-heading {
 .well h5:first-child,
 .well h6:first-child {
   margin-top: 0;
+}
+@font-face {
+  font-family: 'derivia';
+  src: url('../fonts/derivia-webfont.eot');
+  src: url('../fonts/derivia-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/derivia-webfont.woff') format('woff'), url('../fonts/derivia-webfont.ttf') format('truetype'), url('../fonts/derivia-webfont.svg#deriviaregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+body,
+html {
+  background: url('../bg.jpg');
+}
+#video {
+  margin: 0 auto;
+}
+h1 {
+  font-family: 'derivia', serif;
+}
+.logo h1 {
+  font-size: 60px;
+  margin-top: 10px;
+}
+.shout {
+  background: url('../classroom.jpg') no-repeat center center;
+  height: 250px;
+  margin-bottom: 20px;
+}
+.shout .bg {
+  background: -webkit-radial-gradient(300px center, ellipse farthest-corner, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%);
+  padding: 20px;
+  margin-top: 40px;
+}
+.shout h1 {
+  margin-top: 0;
+  font-size: 80px;
 }

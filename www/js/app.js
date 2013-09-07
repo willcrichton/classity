@@ -23,10 +23,21 @@ define(function(require){
         }
     });
 
-    require(['Router'], function(Router) {
+    require(['Router', 'Backbone'], function(Router, Backbone) {
         window.socket = io.connect(document.baseURI);
 
-        var r = new Router();
+        var state = new (Backbone.Model.extend({
+            defaults: {
+                admin: false
+            }
+        }))();
+
+        var r = new Router({state: state});
         Backbone.history.start();
+
+        socket.on('joinedRoom', (function(info) {
+            state.set(info);
+            router.navigate(info.id);
+        }));
     });
 });
