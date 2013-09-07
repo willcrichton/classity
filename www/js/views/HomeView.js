@@ -19,11 +19,12 @@ define(function(require) {
         },
 
         newRoom: function() {
-            socket.emit('newRoom');
+            socket.emit('newRoom', {name: this.$('#name').val()});
+            console.log('creating a room');
         },
 
         join: function() {
-            socket.emit('joinRoom', {id: this.$('input[type=text]').val()});
+            socket.emit('joinRoom', {id: this.$('#id').val()});
             console.log('joining a room');
         },
 
