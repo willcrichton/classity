@@ -8855,18 +8855,9 @@ h1 {
 canvas {
   background: white;
 }
-<<<<<<< HEAD
-#slideShowFrame{
-  height: 400px;
-}
-#ssbuttons{
-  clear:both;
-}
-=======
 .picker {
   z-index: 10000!important;
 }
 .picker.modal-dialog {
   z-index: 10001!important;
 }
->>>>>>> Added more shit
