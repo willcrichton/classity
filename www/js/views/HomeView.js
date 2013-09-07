@@ -22,12 +22,11 @@ define(function(require) {
 
         newRoom: function() {
             this.state.set('name', this.$('#name').val());
-            socket.emit('newRoom', {username: this.$('#name').val()});
+            socket.emit('newRoom', {username: this.$('#name').val(), presentation: this.presentation});
             console.log('creating a room');
         },
 
         join: function() {
-            //socket.emit('joinRoom', this.$('#id').val());
             this.router.navigate(this.$('#id').val(), {trigger: true});
             console.log('joining a room');
         },
@@ -39,13 +38,10 @@ define(function(require) {
                 apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
                 clientId: "2999561058",
                 buttonEl: this.$('#pick')[0],
-                onSelect: function(file) {
-
-                    var url = file.embedLink + "#slide=";
-                    socket.emit("setSlideShowUrl", url);
-                    //window.url = url;
-                    //Should pass file embed link to server.
-                }
+                onSelect: (function(file) {
+                    this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-ok"></i>');
+                    this.presentation = file.embedLink;
+                }).bind(this)
             }); 
 
             // socket.on('updatePresentation', function(newUrl) {

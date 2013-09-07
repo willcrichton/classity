@@ -13,6 +13,8 @@ define(function(require) {
         events: {
             'click #name-update' : 'updateName',
             'click .nav-tabs a'  : 'updateTab',
+            'click #next'        : 'nextSlide',
+            'click #prev'        : 'prevSlide',
             'submit #chatbox'    : 'chat'
         },
 
@@ -20,10 +22,12 @@ define(function(require) {
             this.template = _.template(template);
             this.state = this.options.state;
             
-            this.listenTo(this.state, 'change:clients', this.updateClients);
+            this.listenTo(this.state, 'change:clients change:questions change:answers', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
             this.listenTo(this.state, 'change:tab', this.changeTab);
             this.listenTo(this.state, 'change:lastMessage', this.onChat);
+            this.listenTo(this.state, 'notification', this.notification);
+            this.listenTo(this.state, 'change:SSUrl', this.changeSlide);
         },
 
         updateClients: function() {
@@ -33,7 +37,52 @@ define(function(require) {
                     return;
                 }
 
-                this.$('#clients').append('<li class="list-group-item">' + client + '</li>');
+                var li = $('<li class="list-group-item">' + client + '</li>');
+
+                _.forEach(this.state.get('questions'), function(question, index) {
+                    if (question[0] == client) {
+                        li.append(' <i class="glyphicon glyphicon-exclamation-sign"></i>');
+                        li.addClass('question');
+                        li.click((function() {
+                            this.$('#student-question .modal-title').html('Question from ' + question[0]);
+                            this.$('#student-question .modal-body').html(question[1]);
+                            this.$('#student-question').modal();
+
+                            var questions = this.state.get('questions');
+                            questions.splice(index, 1);
+                            this.state.set('questions', questions);
+                            this.state.trigger('change:questions');
+
+                            if (questions.length === 0 && this.state.get('answers').length == 0) {
+                                this.$('#notification').hide();
+                            }
+                        }).bind(this));
+                    }
+                }, this);
+
+                _.forEach(this.state.get('answers'), function(answer, index) {
+                    if (answer[0] == client && !li.hasClass('question')) {
+                        li.append(' <i class="glyphicon glyphicon-exclamation-sign"></i>');
+                        li.addClass('question');
+                        li.click((function() {
+                            this.$('#student-question .modal-title').html('Answer from ' + answer[0]);
+                            this.$('#student-question .modal-body').html(answer[1]);
+                            this.$('#student-question').modal();
+
+                            var answers = this.state.get('answers');
+                            answers.splice(index, 1);
+                            this.state.set('answers', answers);
+                            this.state.trigger('change:answers');
+
+                            if (answers.length === 0 && this.state.get('questions').length == 0) {
+                                this.$('#notification').hide();
+                            }
+                        }).bind(this));
+                    }
+                }, this);
+
+
+                this.$('#clients').append(li);
             }, this);
         },
 
@@ -75,21 +124,21 @@ define(function(require) {
 
             tool.onMouseDown = function(event) {
                 // Add a segment to the path at the position of the mouse:
-		myPath = new paper.Path();
-		switchMarker(myPath, marker);
-		console.log(specialPoints(event.point));
-		if(specialPoints(event.point) == 0)
+		        myPath = new paper.Path();
+		        switchMarker(myPath, marker);
+		        console.log(specialPoints(event.point));
+		        if(specialPoints(event.point) == 0)
                     myPath.add(event.point);
-		else{
-		    updateMarker(specialPoints(event.point), marker);
-		    switchMarker(myPath, marker);
-		}
-	    }
+		        else{
+		            updateMarker(specialPoints(event.point), marker);
+		            switchMarker(myPath, marker);
+		        }
+	        }
 
 
             tool.onMouseDrag = function(event) {
                 //Continue adding segments to path at position of mouse:
-		if(specialPoints(event.point) == 0)
+		        if(specialPoints(event.point) == 0)
                     myPath.add(event.point);
 		else{
 		    if(myPath.segments.length != 0){
@@ -117,7 +166,7 @@ define(function(require) {
 		    }
 		}
             }
-	    
+
 	    function switchMarker(myPath, marker){
 		myPath.strokeColor = marker.strokeColor;
 		myPath.strokeWidth = marker.strokeWidth;
@@ -244,7 +293,7 @@ define(function(require) {
 
 	    drawSidebar(sidebarInfo);
 //            paper.view.draw();
-
+ 
 	    // function sendBoard(){
 	    // 	socket.emit("board", bigArray, .. );
 	    // }
@@ -256,6 +305,9 @@ define(function(require) {
 	    //socket.admin
 
             //this.$('canvas').attr({width: '750', height: '400'});
+
+
+            paper.view.draw();
         },
 
         initVideo: function() {
@@ -270,11 +322,13 @@ define(function(require) {
             session.connect(apiKey, token);
 
             //var publisher = TB.initPublisher(apiKey, 'video', {width: 750, height: 562});
+            TB.setLogLevel(5);
 
+            var w = 550, h = 465;
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
                     socket.emit('videoId', session.connection.connectionId);
-                    session.publish('video');
+                    session.publish('video', {width: w, height: h});
                 }
                 subscribeToStreams.call(this, event.streams);
             }
@@ -286,16 +340,24 @@ define(function(require) {
             function subscribeToStreams(streams) {
                 _.forEach(streams, function(stream) {
                     if (stream.connection.connectionId == this.state.get('profVideo') && !this.state.get('admin')) {
-                        session.subscribe(stream, 'video');
+                        session.subscribe(stream, 'video', {width: w, height: h});
                     }
                 }, this);
             }
 
         },
 
+        initPresentation: function() {
+            if (this.state.get('SSUrl')) {
+                this.$('iframe').attr('src', this.state.get('SSUrl'));
+            } else {
+                $('#presentation, a[href=#presentation]').hide();
+            }
+        },
+
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                this.$('.modal').modal();
+                this.$('#join-lecture').modal();
                 return false;
             }
 
@@ -321,6 +383,10 @@ define(function(require) {
 
         chat: function(e) {
             var input = $(e.target).children('input');
+            if (input.val() == '') {
+                return;
+            }
+
             socket.emit('chat', input.val());
             this.state.set('lastMessage', '<b>' + this.state.get('name') + '</b>: ' + input.val());
             input.val('');
@@ -331,6 +397,23 @@ define(function(require) {
         onChat: function() {
             var message = this.state.get('lastMessage');
             this.$('#chats').append('<div>' + message + '</div>');
+            this.$('#chats').animate({scrollTop: '+=100000'}, 'fast');
+        },
+
+        notification: function() {
+            this.$('#notification').show();
+        },
+
+        nextSlide: function() {
+            socket.emit('advanceSlide', 1);
+        },
+
+        prevSlide: function() {
+            socket.emit('advanceSlide', -1);
+        },
+
+        changeSlide: function() {
+            this.$('iframe').attr('src', this.state.get('SSUrl'));
         },
 
         render: function() {
@@ -342,6 +425,7 @@ define(function(require) {
 
             this.initVideo();
             this.initWhiteboard();
+            this.initPresentation();
             this.updateClients();
 
             this.controlsView = new ControlsView({
@@ -350,6 +434,10 @@ define(function(require) {
             });
 
             this.$('.nav-tabs').tab();
+
+            if (this.state.get('admin')) {
+                this.$('.col-md-3').hide();
+            }
 
             return this;
         }

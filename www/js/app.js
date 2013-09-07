@@ -35,7 +35,9 @@ define(function(require){
                     auth: false,
                     profVideo: '',
                     tab: '',
-                    lastMessage: ''
+                    lastMessage: '',
+                    questions: [],
+                    answers: []
                 }
             }
         }))();
@@ -79,5 +81,26 @@ define(function(require){
         socket.on('onChat', function(username, message) {
             state.set('lastMessage', '<b>' + username + '</b>: ' + message);
         });
+
+        socket.on('questionAsked', function(username, question) {
+            var questions = state.get('questions');
+            questions.push([username, question]);
+            state.set('questions', questions);
+            state.trigger('change:questions');
+            state.trigger('notification');
+        });
+
+        socket.on('answerGiven', function(username, answer) {
+            var answers = state.get('answers');
+            answers.push([username, answer]);
+            state.set('answers', answers);
+            state.trigger('change:answers');
+            state.trigger('notification');
+        });
+
+        socket.on('updatePresentation', function(url) {
+            state.set('SSUrl', url);
+        });
+
     });
 });

@@ -52,13 +52,25 @@ function profVideo(id) {
 
 function profSSUrl(id) {
     var sockets = io.sockets.clients(id);
-    var video;
+    var SSUrl, SSindex;
     _.forEach(sockets, function(socket) {
         if (socket.admin) {
             SSUrl = socket.SSUrl;
+            SSindex = socket.SSindex;
         }
     });
-    return SSUrl;
+    return SSUrl + '#slide=' + SSindex;
+}
+
+function getProf(id) {
+    var sockets = io.sockets.clients(id);
+    var prof;
+    _.forEach(sockets, function(socket) {
+        if (socket.admin) {
+            prof = socket;
+        }
+    });
+    return prof;
 }
 
 function join(socket, admin) {
@@ -68,13 +80,13 @@ function join(socket, admin) {
         socket.username = username; 
         socket.admin = admin;
         console.log('Set username ' + username);
-        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl() });
+        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl(id) });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
 }
 
 function sendUpdatePresentation(socket) {
-    io.sockets.in(socket.room).emit('updatePresentation', socket.SSUrl + socket.SSindex);
+    io.sockets.in(socket.room).emit('updatePresentation', socket.SSUrl + '#slide=' + socket.SSindex);
 }
 
 io.sockets.on('connection', function(socket) {
@@ -85,6 +97,8 @@ io.sockets.on('connection', function(socket) {
     socket.on('newRoom', function(args) {
         var id = newID();
         console.log('New room ' + id);
+        socket.SSUrl = args.presentation;
+        socket.SSindex = 1;
         join(socket, true)(id, args.username);
     });
 
@@ -115,6 +129,24 @@ io.sockets.on('connection', function(socket) {
         socket.SSindex += increment;
         sendUpdatePresentation(socket);
     })
+
+    socket.on('chat', function(message) {
+        socket.broadcast.to(socket.room).emit('onChat', socket.username, message);
+    });
+
+    socket.on('askQuestion', function(question) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('questionAsked', socket.username, question);
+        }
+    });
+
+    socket.on('giveAnswer', function(answer) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('answerGiven', socket.username, answer);
+        }
+    });
 
     tabs.forEach(function(tab) {
         tabType.init(socket);
