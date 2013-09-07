@@ -17,10 +17,6 @@ define(function(require) {
             this.$el.html(this.template());
 
             this.$('.nav-tabs').tab();
-            /*this.$('.nav-tabs a').click(function(e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });*/
            
             var apiKey = "40476162";
             var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
