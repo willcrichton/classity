@@ -2,7 +2,7 @@
     <h1>Give a lecture online</h1>
     <div class="row">
       <div class="col-md-3">
-        <button class="btn" id="new">Create a new lecture</button>
+        <button class="btn" data-toggle="modal" href="#modal">Create a new lecture</button>
       </div>
       <div class="col-md-1"> OR </div>
       <div class="col-md-3">
@@ -17,3 +17,21 @@
 </div>
 
 <p>Here goes the text explaining the site. Want to give a remote lecture? Here's the place to do it!</p>
+
+<div class="modal fade" id="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Lecture options</h4>
+      </div>
+      <div class="modal-body">
+        <p>Select options:</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="new" data-dismiss="modal">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
