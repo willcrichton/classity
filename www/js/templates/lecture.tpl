@@ -8,7 +8,7 @@
       
       <div class="tab-content">
         <div class="tab-pane active" id="video"></div>
-        <div class="tab-pane" id="whiteboard"></div>
+        <div class="tab-pane" id="whiteboard"><canvas></canvas></div>
       </div>
     </div>
     <div class="col-md-4">

@@ -13,11 +13,37 @@ define(function(require) {
             this.template = _.template(template);
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        initWhiteboard: function() {
+            var canvas = this.$('canvas')[0];
+            paper.setup(canvas);
 
-            this.$('.nav-tabs').tab();
-           
+            var tool = new paper.Tool();
+            var myPath;
+
+            tool.onMouseDown = function(event) {
+                // Add a segment to the path at the position of the mouse:
+                myPath = new paper.Path();
+                myPath.strokeColor = 'black';
+
+                myPath.add(event.point);
+            }
+
+            tool.onMouseDrag = function(event) {
+                //Continue adding segments to path at position of mouse:
+                myPath.add(event.point);
+            }
+
+            tool.onMouseUp = function(event) {
+                //Should stop tracking points;
+                myPath.add(event.point);
+            }
+
+            paper.view.draw();
+
+            this.$('canvas').attr({width: '750', height: '400'});
+        },
+
+        initVideo: function() {
             var apiKey = "40476162";
             var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
             var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz02NDE3YTI3YjhkMDhkNmYwMDAxOTUwZGZkYmZiODNjMTM1NjliNmFjOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtUm5KcElGTmxjQ0F3TmlBeE9Ub3hPVG94TXlCUVJGUWdNakF4TTM0d0xqVTBNemszTmpGLSZjcmVhdGVfdGltZT0xMzc4NTIwMzUzJm5vbmNlPTAuMzU2ODIwNjI1MjY5ODU1NiZleHBpcmVfdGltZT0xMzc4NjA2NzUzJmNvbm5lY3Rpb25fZGF0YT0=";
@@ -49,6 +75,16 @@ define(function(require) {
                     }
                 });
             }
+
+        },
+
+        render: function() {
+            this.$el.html(this.template());
+
+            this.$('.nav-tabs').tab();
+            
+            this.initVideo();
+            this.initWhiteboard();
 
             return this;
         }
