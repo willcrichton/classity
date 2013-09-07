@@ -8001,26 +8001,45 @@ hr.color4 {
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-dialog {
+.modal {
+  color: black!important;
+}
+.modal .modal-header {
+  padding: 10px 20px;
+}
+.modal .modal-header .modal-title {
+  font-size: 24px;
+}
+.modal .modal-header .close {
+  margin-top: 5px;
+}
+.modal .modal-footer {
+  margin-top: 0;
+  padding: 15px 20px;
+}
+.modal-backdrop.in {
+  opacity: 0.7!important;
+}
+.modal-big .modal-dialog {
   padding-right: 0;
   padding-left: 0;
   width: 100%;
 }
-.modal-content {
+.modal-big .modal-content {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: none;
   background: none;
   width: 100%;
 }
-.modal-header {
+.modal-big .modal-header {
   border: none;
   width: 60%;
   margin-left: 20%;
   padding-left: 0;
   padding-right: 0;
 }
-.modal-header > .close {
+.modal-big .modal-header > .close {
   color: #ffffff;
   color: #f5f8fa;
   margin-top: 0;
@@ -8031,12 +8050,12 @@ hr.color4 {
   top: -12px;
   right: -14px;
 }
-.modal-title {
+.modal-big .modal-title {
   color: #ffffff;
   color: #f5f8fa;
   margin-left: 0;
 }
-.modal-body {
+.modal-big .modal-body {
   border-radius: 0;
   width: 100%;
   padding-left: 20%;
@@ -8046,87 +8065,87 @@ hr.color4 {
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-body.color1 {
+.modal-big .modal-body.color1 {
   background: #79a0ba;
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-body.color1a {
+.modal-big .modal-body.color1a {
   background: #3f7498;
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-body.color1b {
+.modal-big .modal-body.color1b {
   background: #5a93b9;
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-body.color1c {
+.modal-big .modal-body.color1c {
   background: #9bb6c7;
   color: #ffffff;
   color: #f5f8fa;
 }
-.modal-body.color2 {
+.modal-big .modal-body.color2 {
   background: #8278ba;
   color: #ffffff;
   color: #f6f5fa;
 }
-.modal-body.color2a {
+.modal-big .modal-body.color2a {
   background: #4c3f98;
   color: #ffffff;
   color: #f6f5fa;
 }
-.modal-body.color2b {
+.modal-big .modal-body.color2b {
   background: #695ab9;
   color: #ffffff;
   color: #f6f5fa;
 }
-.modal-body.color2c {
+.modal-big .modal-body.color2c {
   background: #a29bc7;
   color: #ffffff;
   color: #f6f5fa;
 }
-.modal-body.color3 {
+.modal-big .modal-body.color3 {
   background: #78baa3;
   color: #ffffff;
   color: #f5faf8;
 }
-.modal-body.color3a {
+.modal-big .modal-body.color3a {
   background: #3f9878;
   color: #ffffff;
   color: #f5faf8;
 }
-.modal-body.color3b {
+.modal-big .modal-body.color3b {
   background: #5ab998;
   color: #ffffff;
   color: #f5faf8;
 }
-.modal-body.color3c {
+.modal-big .modal-body.color3c {
   background: #9bc7b8;
   color: #355248;
   color: #395c50;
 }
-.modal-body.color4 {
+.modal-big .modal-body.color4 {
   background: #ba9278;
   color: #ffffff;
   color: #faf7f5;
 }
-.modal-body.color4a {
+.modal-big .modal-body.color4a {
   background: #98623f;
   color: #ffffff;
   color: #faf7f5;
 }
-.modal-body.color4b {
+.modal-big .modal-body.color4b {
   background: #b9805a;
   color: #ffffff;
   color: #faf7f5;
 }
-.modal-body.color4c {
+.modal-big .modal-body.color4c {
   background: #c7ad9b;
   color: #ffffff;
   color: #faf7f5;
 }
-.modal-footer {
+.modal-big .modal-footer {
   background: transparent;
   margin-top: 0;
   border: none;
@@ -8135,18 +8154,18 @@ hr.color4 {
   padding-left: 0;
   padding-right: 0;
 }
-.modal-backdrop {
+.modal-big .modal-backdrop {
   background-color: #3f7498;
 }
-.modal-backdrop.fade {
+.modal-big .modal-backdrop.fade {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-.modal-backdrop.in {
+.modal-big .modal-backdrop.in {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.modal-backdrop:before {
+.modal-big .modal-backdrop:before {
   display: block;
   content: "";
   background: #3f7498;
@@ -8775,35 +8794,79 @@ h1 {
 .panel {
   height: 600px;
 }
-.panel .row > :first-child {
+.panel #column-left {
   height: 570px;
-  border-right: 1px solid #999;
+  border-right: 1px solid #cccccc;
   margin-right: -1px;
+  position: relative;
 }
-.panel .row > :first-child .nav-tabs {
+.panel #column-left .nav-tabs {
   margin-bottom: 10px;
+  border-bottom: 1px solid #cccccc;
 }
-.panel .row > :first-child .nav-tabs .active a {
+.panel #column-left .nav-tabs .active a {
   background: rgba(255, 255, 255, 0.2);
   color: white;
 }
-.panel .row > :first-child .tab-content {
-  height: 400px;
+.panel #column-left .tab-content {
+  height: 465px;
   margin-bottom: 10px;
 }
-.panel .row > :first-child #controls {
+.panel #column-left #controls {
   text-align: center;
 }
-.panel #chats {
+.panel #column-left #notification {
+  position: absolute;
+  top: 7px;
+  right: 15px;
+  display: none;
+}
+.panel #column-left #notification span {
+  color: yellow;
+}
+.panel #column-right .box:first-child {
+  margin-bottom: 5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cccccc;
+}
+.panel #column-right h2 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  transition: all 0.3s ease-in;
+}
+.panel #column-right input[type=text] {
   width: 100%;
-  overflow: hidden;
+}
+.panel #column-right #chats {
+  width: 100%;
+  height: 186px;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+.panel #column-right #clients {
+  height: 280px;
+  margin-bottom: 0;
+}
+.panel #column-right #clients .question {
+  cursor: pointer;
 }
 canvas {
   background: white;
 }
+<<<<<<< HEAD
 #slideShowFrame{
   height: 400px;
 }
 #ssbuttons{
   clear:both;
 }
+=======
+.picker {
+  z-index: 10000!important;
+}
+.picker.modal-dialog {
+  z-index: 10001!important;
+}
+>>>>>>> Added more shit

@@ -61,6 +61,17 @@ function profSSUrl(id) {
     return SSUrl;
 }
 
+function getProf(id) {
+    var sockets = io.sockets.clients(id);
+    var prof;
+    _.forEach(sockets, function(socket) {
+        if (socket.admin) {
+            prof = socket;
+        }
+    });
+    return prof;
+}
+
 function join(socket, admin) {
     return function(id, username) {
         socket.join(id);
@@ -115,6 +126,24 @@ io.sockets.on('connection', function(socket) {
         socket.SSindex += increment;
         sendUpdatePresentation(socket);
     })
+
+    socket.on('chat', function(message) {
+        socket.broadcast.to(socket.room).emit('onChat', socket.username, message);
+    });
+
+    socket.on('askQuestion', function(question) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('questionAsked', socket.username, question);
+        }
+    });
+
+    socket.on('giveAnswer', function(answer) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('answerGiven', socket.username, answer);
+        }
+    });
 
     tabs.forEach(function(tab) {
         tabType.init(socket);

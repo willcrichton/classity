@@ -39,13 +39,11 @@ define(function(require) {
                 apiKey: 'AIzaSyBph-Hss-kNUl3SuJeXQsV7s709Dk3gseA',
                 clientId: "2999561058",
                 buttonEl: this.$('#pick')[0],
-                onSelect: function(file) {
-
-                    var url = file.embedLink + "#slide=";
-                    socket.emit("setSlideShowUrl", url);
-                    //window.url = url;
-                    //Should pass file embed link to server.
-                }
+                onSelect: (function(file) {
+                    this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-yes"></i>');
+                    var url = file.embedLink + "#slide=5";
+                    console.log(url);
+                }).bind(this)
             }); 
 
             // socket.on('updatePresentation', function(newUrl) {

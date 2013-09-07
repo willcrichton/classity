@@ -46,8 +46,8 @@
       </div>
       <div class="modal-body">
         <input type="text" placeholder="Your name" id="name"><br /><br />
-        If you would like to use a PowerPoint presentation, please select it in SkyDrive.<br />
-        <button class="btn" id="pick">Choose PPT</button>
+        To use a PowerPoint, load it from your Google Drive.<br />
+        <button class="btn" id="pick">Choose PPT</button> <span id="ppt"></span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="new" data-dismiss="modal">Create</button>
