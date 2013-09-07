@@ -43,26 +43,149 @@ define(function(require) {
 
             var tool = new paper.Tool();
             var myPath;
+	    var marker = {
+		strokeColor: 'black', 
+		strokeWidth: '4',
+		strokeCap: 'round'
+	    }
+	    var originInfo = {
+		radius: 18,
+		box: 40,
+		plusX: 75,
+		plusY: 75,
+	    };
+	    
+	    var sidebarInfo = {
+		radius: originInfo.radius,
+		box: originInfo.box,
+		plusX:  originInfo.plusX,
+		plusY:  originInfo.plusY,
+		minusX: originInfo.plusX,
+		minusY: originInfo.plusY + originInfo.box,
+		offset: originInfo.plusX + (originInfo.box/2) +  originInfo.box,
+		sca1: originInfo.plusY - (originInfo.box/2),
+		sca2: originInfo.plusY + (originInfo.box/2),
+		rows: 5,
+		color: ["#FAFAFA", "#ADBEEF", "#345678", '#00FF00', "#00FFFF", "#FF00FF", "#FFFF00", "#555555", "#FF0000", "#0000FF"]
+	    };
 
             tool.onMouseDown = function(event) {
                 // Add a segment to the path at the position of the mouse:
-                myPath = new paper.Path();
-                myPath.strokeColor = 'black';
+		myPath = new paper.Path();
+		switchMarker(myPath, marker);
+		console.log(specialPoints(event.point));
+		if(specialPoints(event.point) == 0)
+                    myPath.add(event.point);
+		else{
+		    updateMarker(specialPoints(event.point), marker);
+		    switchMarker(myPath, marker);
+		}
+	    }
 
-                myPath.add(event.point);
-            }
 
             tool.onMouseDrag = function(event) {
                 //Continue adding segments to path at position of mouse:
-                myPath.add(event.point);
+		if(specialPoints(event.point) == 0)
+                    myPath.add(event.point);
             }
 
             tool.onMouseUp = function(event) {
                 //Should stop tracking points;
                 myPath.add(event.point);
             }
+	    
+	    function switchMarker(myPath, marker){
+		myPath.strokeColor = marker.strokeColor;
+		myPath.strokeWidth = marker.strokeWidth;
+		myPath.strokeCap = marker.strokeCap;
+	    }
 
-            paper.view.draw();
+	    function drawRoundedSquare(corner, size){
+		var rectangle = new paper.Rectangle(corner, size);
+		var cornerSize = new paper.Size(5, 5);
+		return new paper.Path.Rectangle(rectangle, cornerSize);
+	    }
+
+	    function drawSidebar(sidebarInfo){
+		var strokeColor = 'black';
+		var strokeWidth = '1';
+		var r = sidebarInfo.radius;
+		var side = 2*r;
+		//Draws increase.
+		var incpath = drawRoundedSquare(new paper.Point(sidebarInfo.plusX - r, sidebarInfo.plusY - r) ,
+						new paper.Size(side, side));
+		incpath.strokeColor = strokeColor;
+		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5); 
+		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2); 
+		circbg.strokeColor = strokeColor;
+		circsm.strokeColor = strokeColor;
+    
+		//Draws decrease.
+		var decpath = drawRoundedSquare(new paper.Point(sidebarInfo.minusX - r, sidebarInfo.minusY - r),
+						new paper.Size(side, side));
+		decpath.strokeColor = strokeColor;
+
+		//Loops through colors and draws colors. Fills colors with colors.
+		var ipath = [];
+		for(var i = 0; i < (2 * sidebarInfo.rows); i++){
+		    var col, row;
+		    if(i < sidebarInfo.rows)
+			col = sidebarInfo.sca1 - r;
+		    else
+			col = sidebarInfo.sca2 - r;
+		    row = (i % 5) * sidebarInfo.box  + sidebarInfo.offset;
+		    ipath[i] = drawRoundedSquare(new paper.Point(col, row), new paper.Size(side, side));
+		    console.log(col, row, side);
+		    ipath[i].fillColor = sidebarInfo.color[i];
+		}
+	    }
+	    function specialPoints(p){
+		var r = sidebarInfo.radius;
+		if(p.x < sidebarInfo.sca1 - r || p.x > sidebarInfo.sca2 + r || 
+		   p.y < sidebarInfo.plusX - r || p.y > sidebarInfo.rows * sidebarInfo.box + sidebarInfo.offset){
+		    //console.log("safe");
+		    return 0;
+		}
+		//returns 0 if nothing changes, 1 if markersize is increased by 1, -1 if markersize if decreased by 1, otherwise the hex value for the color.
+		//100 < x < 200 and 50 < X < 250
+		//200, 300. 50 space 350 to 450. 50 space. 500 to 1000.
+		if( sidebarInfo.plusX - r < p.x && p.x < sidebarInfo.plusX + r &&
+		    sidebarInfo.plusY - r < p.y && p.y < sidebarInfo.plusY + r){
+		    return 1;
+		}
+		if( sidebarInfo.minusX - r < p.x && p.x < sidebarInfo.minusX + r  &&
+		    sidebarInfo.minusY - r < p.y && p.y < sidebarInfo.minusY + r){
+		    return -1;
+		}
+    
+		var qx = p.x - sidebarInfo.sca1 + r;
+		var dx = Math.floor(qx/sidebarInfo.box);
+		var qy = p.y - sidebarInfo.offset;
+		var dy = Math.floor(qy/sidebarInfo.box);
+		console.log(qx, qy);
+		var j = dx * 5 + dy;
+		if(j >= 0)
+		    return 10+j; //very hacky coding to avoid conflicts
+		else 
+		    return 0;
+	    }
+	    
+	    function updateMarker(change, marker){
+		if(change == 1 && marker.strokeWidth < 30){
+		    marker.strokeWidth = 5;
+		    //marker.strokeWidth++;
+		}
+		if(change == -1 && marker.strokeWidth > 1){
+		    //marker.strokeWidth--;
+		    marker.strokeWidth = 2;
+		}
+		if(10 <= change && change < 99){
+		    marker.strokeColor = sidebarInfo.color[change-10];
+		}
+	    }
+
+	    drawSidebar(sidebarInfo);
+//            paper.view.draw();
 
             //this.$('canvas').attr({width: '750', height: '400'});
         },
