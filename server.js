@@ -50,6 +50,16 @@ function profVideo(id) {
     return video;
 }
 
+function profSSUrl(id) {
+    var sockets = io.sockets.clients(id);
+    var video;
+    _.forEach(sockets, function(socket) {
+        if (socket.admin) {
+            SSUrl = socket.SSUrl;
+        }
+    });
+    return SSUrl;
+}
 
 function join(socket, admin) {
     return function(id, username) {
@@ -57,11 +67,14 @@ function join(socket, admin) {
         socket.room = id;
         socket.username = username; 
         socket.admin = admin;
-
         console.log('Set username ' + username);
-        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id)});
+        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl() });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
+}
+
+function sendUpdatePresentation(socket) {
+    io.sockets.in(socket.room).emit('updatePresentation', socket.SSUrl + socket.SSindex);
 }
 
 io.sockets.on('connection', function(socket) {
@@ -91,6 +104,17 @@ io.sockets.on('connection', function(socket) {
     socket.on('changeTab', function(tab) {
         socket.broadcast.to(socket.room).emit('changeTab', tab);
     });
+
+    socket.on('setSlideShowUrl', function(SSUrl) {
+        socket.SSUrl = SSUrl;
+        socket.SSindex = 1;
+        sendUpdatePresentation(socket);
+    });
+
+    socket.on('advanceSlide', function(increment) {
+        socket.SSindex += increment;
+        sendUpdatePresentation(socket);
+    })
 
     tabs.forEach(function(tab) {
         tabType.init(socket);

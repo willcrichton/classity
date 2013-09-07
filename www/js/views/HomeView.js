@@ -41,11 +41,16 @@ define(function(require) {
                 buttonEl: this.$('#pick')[0],
                 onSelect: function(file) {
 
-                    url = file.embedLink + "#slide=";
+                    var url = file.embedLink + "#slide=";
                     socket.emit("setSlideShowUrl", url);
+                    //window.url = url;
                     //Should pass file embed link to server.
                 }
             }); 
+
+            // socket.on('updatePresentation', function(newUrl) {
+            //       $('#slideShowFrame').attr("src", newUrl);
+            // })
 
             //SECOND BUTTON?
             // var picker2 = new FilePicker({
