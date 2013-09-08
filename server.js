@@ -79,16 +79,23 @@ function join(socket, admin) {
         } else {
             socket.admin = args.adminOverride;
         }
+	
 
         var SSUrl;
-        if(args.SSUrl === undefined || args.SSUrl === null) {
+        if(!(socket.admin) || args.SSUrl === undefined || args.SSUrl === null) {
             SSUrl = profSSUrl(args.id);
         } else {
             console.log(args.SSUrl);
             var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
-            socket.SSUrl = theMatch[1];
-            socket.SSindex = parseInt(theMatch[2]);
-            SSUrl = args.SSUrl;
+            // if(theMatch === undefined || theMatch === null){
+	    // 	SSUrl = profSSUrl(args.id);
+	    // 	SSindex = 1;
+	    // }
+//	    else{
+		socket.SSUrl = theMatch[1];
+		socket.SSindex = parseInt(theMatch[2]);
+		SSUrl = args.SSUrl;
+//	    }
         }
 
         var prof = getProf(args.id);

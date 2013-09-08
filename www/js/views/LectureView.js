@@ -239,9 +239,11 @@ define(function(require) {
             }
 
 	    function switchMarker(myPath, marker){
-		myPath.strokeColor = marker.strokeColor;
-		myPath.strokeWidth = marker.strokeWidth;
-		myPath.strokeCap = marker.strokeCap;
+		if(myPath !== undefined){
+		    myPath.strokeColor = marker.strokeColor;
+		    myPath.strokeWidth = marker.strokeWidth;
+		    myPath.strokeCap = marker.strokeCap;
+		}
 	    }
 
 	    function drawRoundedSquare(corner, size){
@@ -438,6 +440,7 @@ define(function(require) {
 	    }
 
 	    function switchBoard(select){
+		console.log(current, select, "information");
 		if(select === 3 && boards[current + 1] !== undefined){
 		    setInvisible(boards[current], false);
 		    current++;
@@ -455,6 +458,7 @@ define(function(require) {
 			boards[current] = [];
 		    }
 		}
+		sendBoard(mouseevent(event));
 	    }
 
 	    function sendBoard(event){
