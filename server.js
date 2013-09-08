@@ -11,15 +11,7 @@ server.listen(7000);
 var io = require('socket.io').listen(server);
 var _ = require('underscore');
 
-// Adding a tab? You'll want to add a line like
-//     tabTypes.push(require('name'));
-// here, which will use the function called
-//     exports.init(socket)
-// defined in the name.js file.
-
-var tabs = [];
-//tabs.push(require('presentation'));
-//tabs.push(require('whiteboard'));
+var whiteboardData;
 
 var ids = [];
 function newID() {
@@ -107,7 +99,8 @@ function join(socket, admin) {
             'profVideo': profVideo(args.id),
             'profName': prof ? prof.username : '',
             'name': args.username,
-            'SSUrl': SSUrl
+            'SSUrl': SSUrl,
+            'whiteboardData': whiteboardData
         });
         socket.broadcast.to(args.id).emit('clientsChanged', usernames(args.id));
     };
@@ -136,6 +129,10 @@ io.sockets.on('connection', function(socket) {
 
         // clientsLeft instead of changes b/c at this point socket list still includes leaver
         socket.broadcast.to(id).emit('clientsLeft', socket.username);
+    });
+
+    socket.on('updateBoard', function(newData) {
+        whiteboardData = newData;
     });
 
     socket.on('videoId', function(id) {
@@ -189,9 +186,5 @@ io.sockets.on('connection', function(socket) {
         if (prof) {
             prof.emit('posedAnswer', socket.username, answer);
         }
-    });
-
-    tabs.forEach(function(tab) {
-        tabType.init(socket);
     });
 });
