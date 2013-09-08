@@ -1,7 +1,6 @@
 <% if (admin) { %>
 
 <button type="button" class="btn btn-lg btn-primary" id="admin-question" data-toggle="modal" href="#admin-modal">Pose a question <i class="glyphicon glyphicon-question-sign"></i></button>
-<button type="button" class="btn btn-lg btn-default" id="admin-question" data-toggle="modal" href="#share-modal">Share the link <i class="glyphicon glyphicon-send"></i></button>
 
 <div class="modal" id="admin-modal">
   <div class="modal-dialog">

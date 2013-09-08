@@ -8765,10 +8765,40 @@ html {
 h1 {
   font-family: 'derivia', serif;
 }
+.btn {
+  transition: all 0.1s ease-in-out;
+}
+nav {
+  padding-top: 8px;
+}
+nav a {
+  display: block;
+  text-align: center;
+  padding-top: 22px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  border: 2px solid white;
+  float: left;
+  transition: all 0.2s linear;
+  font: bold 20px 'derivia';
+  color: white;
+  margin-right: 15px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+nav a:hover,
+nav a.active {
+  background: rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  color: white;
+  text-decoration: none;
+}
+nav a.active {
+  box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
 .logo h1 {
   font-size: 60px;
   margin-top: 10px;
-  margin-left: 25px;
   text-shadow: 1px 1px 2px black;
 }
 .logo h1 a {
@@ -8792,36 +8822,34 @@ h1 {
   margin-top: 0;
   font-size: 80px;
 }
-.panel {
-  height: 600px;
-}
-.panel #column-left {
+#column-left {
   height: 570px;
   border-right: 1px solid #cccccc;
   margin-right: -1px;
   position: relative;
 }
-.panel #column-left .nav-tabs {
+#column-left .nav-tabs {
   margin-bottom: 10px;
   border-bottom: 1px solid #cccccc;
 }
-.panel #column-left .nav-tabs .active a {
+#column-left .nav-tabs .active a {
   background: rgba(255, 255, 255, 0.2);
   color: white;
 }
-.panel #column-left .tab-content {
-  height: 465px;
+#column-left .tab-content {
+  height: 575px;
   margin-bottom: 10px;
+  margin-top: 10px;
 }
-.panel #column-left .tab-content .tab-pane {
+#column-left .tab-content .tab-pane {
   position: relative;
 }
-.panel #column-left .tab-content iframe {
-  height: 465px;
+#column-left .tab-content iframe {
+  height: 575px;
   border: none;
   margin-left: 80px;
 }
-.panel #column-left .tab-content #ssbuttons {
+#column-left .tab-content #ssbuttons {
   position: absolute;
   bottom: -6px;
   left: 80px;
@@ -8830,68 +8858,69 @@ h1 {
   padding-top: 3px;
   text-align: center;
 }
-.panel #column-left .tab-content .arrow {
-  height: 425px;
+#column-left .tab-content .arrow {
+  height: 535px;
   width: 75px;
   background: url(../arrow.png) no-repeat center center;
   position: absolute;
   top: 0;
   cursor: pointer;
 }
-.panel #column-left .tab-content .arrow.right {
+#column-left .tab-content .arrow.right {
   -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
   right: 0;
 }
-.panel #column-left .tab-content .arrow:hover {
+#column-left .tab-content .arrow:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
-.panel #column-left #controls {
+#column-left #controls {
   text-align: center;
 }
-.panel #column-left #controls .modal {
+#column-left #controls .modal {
   text-align: left;
 }
-.panel #column-left #notification {
+#column-left #notification {
   position: absolute;
-  top: 7px;
-  right: 15px;
+  top: -55px;
+  right: 34px;
   display: none;
 }
-.panel #column-left #notification span {
+#column-left #notification span {
   color: yellow;
 }
-.panel #column-right .box:first-child {
+#column-right .box:first-child {
   margin-bottom: 5px;
   padding-bottom: 10px;
   border-bottom: 1px solid #cccccc;
 }
-.panel #column-right h2 {
+#column-right h2 {
   margin-top: 5px;
   margin-bottom: 5px;
   transition: all 0.3s ease-in;
+  font-size: 30px;
 }
-.panel #column-right input[type=text] {
+#column-right input[type=text] {
   width: 100%;
 }
-.panel #column-right #chats {
+#column-right #chats {
   width: 100%;
-  height: 186px;
+  height: 230px;
   margin-bottom: 10px;
   overflow-y: auto;
   overflow-x: hidden;
   font-size: 14px;
 }
-.panel #column-right #clients {
+#column-right #clients {
   height: 280px;
   margin-bottom: 0;
 }
-.panel #column-right #clients .question {
+#column-right #clients .question {
   cursor: pointer;
 }
-.panel #column-right #clients.tall {
-  height: 510px;
+#column-right #clients.tall {
+  height: 480px;
 }
 canvas {
   background: white;

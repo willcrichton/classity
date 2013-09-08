@@ -379,7 +379,7 @@ define(function(require) {
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
 
-            var w = 920, h = 465;
+            var w = 920, h = 575;
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
                     socket.emit('videoId', session.connection.connectionId);
@@ -405,9 +405,8 @@ define(function(require) {
         initPresentation: function() {
             if (this.state.get('SSUrl') && this.state.get('SSUrl').indexOf('undefined') === -1) {
                 this.$('iframe').attr('src', this.state.get('SSUrl'));
-            } else {
-                $('#presentation, a[href=#presentation]').hide();
-            }
+                $('#presentation, a[href=#presentation]').show();
+            } 
         },
 
         checkPermissions: function() {
@@ -451,7 +450,7 @@ define(function(require) {
 
         // for when we receive tab change from professor
         changeTab: function() {
-            this.$('.nav-tabs a[href=#' + this.state.get('tab') + ']').tab('show');
+            this.$('nav a[href=#' + this.state.get('tab') + ']').tab('show');
         },
 
         chat: function(e) {
@@ -532,7 +531,12 @@ define(function(require) {
                 state: this.state
             });
 
-            this.$('.nav-tabs').tab();
+            $('.logo > .row > *').css('display', 'block');
+            $('nav a').click(function(e) {
+                e.preventDefault();
+                $('nav a').removeClass('active');
+                $(this).addClass('active');
+            });
 
             if (this.state.get('admin')) {
                 this.$('#column-right div:first-child').hide();

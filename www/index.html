@@ -7,9 +7,21 @@
   </head>
   <body>
     <div class="container logo">
-      <h1>
-        <a href="/">classity</a>
-      </h1>
+      <div class="row">
+        <h1 class="col-md-2">
+          <a href="/">classity</a>
+        </h1>
+        <nav class="col-md-6" style="margin-left: 10px; margin-right: -10px; display: none;">
+          <img src="dots.png" style="position: absolute; top: 40px; left: -32px;" />
+          <a class="active" href="#video" data-toggle="tab">video</a>
+          <a href="#whiteboard" data-toggle="tab">board</a>          
+          <a href="#presentation" data-toggle="tab" style="display: none;">slides</a>
+          <a href="#">link<i class="glyphicon glyphicon-link"></i></a>
+        </nav>
+        <div class="col-md-4" style="text-align: right; padding-top: 15px; display: none;">
+          <button type="button" class="btn btn-lg btn-default" id="admin-question" data-toggle="modal" href="#share-modal" style="position: relative; left: 5px; top: 3px;">Link to lecture <i class="glyphicon glyphicon-send"></i></button>
+        </div>
+      </div>
     </div>
 
     <div id="container"></div>
