@@ -141,7 +141,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('boardOut', function(paths) {
-	socket.broadcast.to(socket.room).emit('boardIn', paths);
+	    socket.broadcast.to(socket.room).emit('boardIn', paths);
     });
 
     socket.on('changeTab', function(tab) {
