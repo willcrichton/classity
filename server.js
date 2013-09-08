@@ -88,11 +88,13 @@ function join(socket, admin) {
         }
 	
         console.log('Set username ' + username);
-	socket.emit('joinedRoom', {
+        var prof = getProf(id);
+	    socket.emit('joinedRoom', {
             'id':id,
             'admin':socket.admin,
             'clients': usernames(id),
             'profVideo': profVideo(id),
+            'profName': prof ? prof.username : '',
             'name': username,
             'SSUrl': profSSUrl(id) });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
