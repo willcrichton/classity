@@ -8854,9 +8854,9 @@ nav a.active {
 }
 #column-left .tab-content #ssbuttons {
   position: absolute;
-  bottom: -6px;
+  bottom: -10px;
   left: 80px;
-  width: 761px;
+  width: 782px;
   background: #9bb6c7;
   padding-top: 3px;
   text-align: center;
