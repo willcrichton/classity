@@ -316,8 +316,8 @@ define(function(require) {
 
         initVideo: function() {
 	        var apiKey = "40476162";
-            var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
-            var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz02NDE3YTI3YjhkMDhkNmYwMDAxOTUwZGZkYmZiODNjMTM1NjliNmFjOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtUm5KcElGTmxjQ0F3TmlBeE9Ub3hPVG94TXlCUVJGUWdNakF4TTM0d0xqVTBNemszTmpGLSZjcmVhdGVfdGltZT0xMzc4NTIwMzUzJm5vbmNlPTAuMzU2ODIwNjI1MjY5ODU1NiZleHBpcmVfdGltZT0xMzc4NjA2NzUzJmNvbm5lY3Rpb25fZGF0YT0=";
+            var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-U2F0IFNlcCAwNyAxOTo0MDo1NCBQRFQgMjAxM34wLjM1OTI1ODIzfg";
+            var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz1mMDA5ZDU0N2U4YWFlOTA5NmI1MDEwYjc4YTM2OTE2ODU4YmUwZDk3OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtVTJGMElGTmxjQ0F3TnlBeE9UbzBNRG8xTkNCUVJGUWdNakF4TTM0d0xqTTFPVEkxT0RJemZnJmNyZWF0ZV90aW1lPTEzNzg2MDgwNTQmbm9uY2U9MC42Njk3MjM3NDAwODM5NjI1JmV4cGlyZV90aW1lPTEzNzg2OTQ0NTQmY29ubmVjdGlvbl9kYXRhPQ==";
 
             // Initialize session, set up event listeners, and connect
             var session = TB.initSession(sessionId);
