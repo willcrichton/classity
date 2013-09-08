@@ -15,6 +15,7 @@ define(function(require) {
             'click .nav-tabs a'  : 'updateTab',
             'click #next'        : 'nextSlide',
             'click #prev'        : 'prevSlide',
+            'click #download'    : 'downloadWindow',
             'submit #chatbox'    : 'chat'
         },
 
@@ -422,6 +423,10 @@ define(function(require) {
             socket.emit('advanceSlide', -1);
         },
 
+        downloadWindow: function() {
+            window.open(this.state.get("downloadLink"), '_blank');
+        },
+
         changeSlide: function() {
             this.$('iframe').attr('src', this.state.get('SSUrl'));
         },
@@ -449,7 +454,7 @@ define(function(require) {
                 this.$('#column-right div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
-                this.$('#ssbuttons').hide();
+                this.$('#ssbuttonsHider').hide();
             }
 
             return this;

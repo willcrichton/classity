@@ -8768,15 +8768,10 @@ h1 {
 .logo h1 {
   font-size: 60px;
   margin-top: 10px;
-  margin-bottom:-15px;
   text-shadow: 1px 1px 2px black;
-}
-.logo img {
-  margin-bottom: 30px;
 }
 .logo h1 a {
   text-decoration: none;
-  margin-left: -10px;
   color: white;
 }
 .logo h1 a:hover {
@@ -8834,6 +8829,9 @@ h1 {
   padding-top: 3px;
   text-align: center;
 }
+.panel #column-left .tab-content #download {
+  float: right;
+}
 .panel #column-left #controls {
   text-align: center;
 }
@@ -8873,6 +8871,9 @@ h1 {
 }
 .panel #column-right #clients .question {
   cursor: pointer;
+}
+.panel #column-right #clients.tall {
+  height: 510px;
 }
 canvas {
   background: white;

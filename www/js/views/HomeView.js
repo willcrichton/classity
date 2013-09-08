@@ -39,8 +39,10 @@ define(function(require) {
                 clientId: "2999561058",
                 buttonEl: this.$('#pick')[0],
                 onSelect: (function(file) {
+                    window.file = file;
                     this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-ok"></i>');
                     this.presentation = file.embedLink;
+                    this.state.set("downloadLink", file.exportLinks["application/pdf"]);
                 }).bind(this)
             }); 
 

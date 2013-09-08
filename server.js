@@ -129,7 +129,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('advanceSlide', function(increment) {
-        socket.SSindex += increment;
+        socket.SSindex = Math.max(socket.SSindex += increment, 1);
         sendUpdatePresentation(socket);
     })
 
