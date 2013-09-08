@@ -8837,6 +8837,9 @@ h1 {
 .panel #column-left #controls {
   text-align: center;
 }
+.panel #column-left #controls .modal {
+  text-align: left;
+}
 .panel #column-left #notification {
   position: absolute;
   top: 7px;
@@ -8873,6 +8876,9 @@ h1 {
 }
 .panel #column-right #clients .question {
   cursor: pointer;
+}
+.panel #column-right #clients.tall {
+  height: 510px;
 }
 canvas {
   background: white;
