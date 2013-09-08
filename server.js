@@ -98,7 +98,7 @@ function join(socket, admin) {
             SSUrl = args.SSUrl;
         }
 
-        var prof = getProf(id);
+        var prof = getProf(args.id);
 	socket.emit('joinedRoom', {
             'id':args.id,
             'admin':socket.admin,
