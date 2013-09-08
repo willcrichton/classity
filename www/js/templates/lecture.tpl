@@ -55,7 +55,9 @@
         <h4 class="modal-title">Join the lecture</h4>
       </div>
       <div class="modal-body">
-        <input type="text" placeholder="What's your name?" id="name">
+        <form onsubmit="return false;" id="join-form">
+          <input type="text" placeholder="What's your name?" id="name">
+        </form>
       </div>
       <div class="modal-footer">
         <button type="btn" class="btn" data-dismiss="modal" id="name-update">Submit</button>

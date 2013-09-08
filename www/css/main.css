@@ -8835,6 +8835,9 @@ h1 {
 .panel #column-left #controls {
   text-align: center;
 }
+.panel #column-left #controls .modal {
+  text-align: left;
+}
 .panel #column-left #notification {
   position: absolute;
   top: 7px;
