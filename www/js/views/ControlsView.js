@@ -110,6 +110,12 @@ define(function(require) {
             this.$el.html(this.template(this.state.toJSON()));
             if (this.$('#results-chart').length) {
                 this.chart = new Chart(this.$('#results-chart')[0].getContext('2d'));
+            } else {
+                this.$el.css({
+                    position: 'absolute',
+                    top: '-68px',
+                    left: '-410px'
+                });
             }
             
             this.addAnswer();

@@ -541,7 +541,7 @@ define(function(require) {
             });
 
             $('nav .pull-right').popover({placement: 'bottom'});
-            $('nav .pull-right').attr('data-clipboard-text', 'test?');
+            $('nav .pull-right').attr('data-clipboard-text', document.baseURI);
             var clip = new ZeroClipboard($('nav .pull-right')[0], {
                 moviePath: '/js/vendor/ZeroClipboard.swf'
             });
@@ -555,6 +555,8 @@ define(function(require) {
                 }
                 opened = !opened;
             });
+
+            this.$('#chatbox input').attr('placeholder', this.state.get('name') + ':');
 
             if (this.state.get('admin')) {
                 this.$('#column-right div:first-child').hide();

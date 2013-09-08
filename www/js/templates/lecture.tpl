@@ -24,7 +24,7 @@
         <h2>Chat</h2>
         <div id="chats"></div>
         <form id="chatbox" onsubmit="return false">
-          <input type="text" placeholder="Chat message">
+          <input type="text">
         </form>
       </div>
       <div class="box">

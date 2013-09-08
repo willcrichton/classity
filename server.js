@@ -92,6 +92,7 @@ function join(socket, admin) {
         if(args.SSUrl === undefined || args.SSUrl === null) {
             SSUrl = profSSUrl(args.id);
         } else {
+            console.log(args.SSUrl);
             var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
             socket.SSUrl = theMatch[1];
             socket.SSindex = parseInt(theMatch[2]);
