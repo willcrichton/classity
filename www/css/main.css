@@ -8830,7 +8830,9 @@ h1 {
   text-align: center;
 }
 .panel #column-left .tab-content #download {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 .panel #column-left #controls {
   text-align: center;

@@ -1,12 +1,12 @@
 <div class="shout">
   <div class="container">
     <div class="bg">
-      <h1>Real-time lectures on the web</h1>
+      <h1>Real-time lectures on the web.</h1>
       <div class="row">
         <div class="col-md-2">
           <button class="btn btn-success" data-toggle="modal" href="#modal"><i class="glyphicon glyphicon-plus"></i> Create a new lecture</button>
         </div>
-        <div class="col-md-1" style="margin-left:60px;font-size:26px;"> OR </div>
+        <div class="col-md-1" style="margin-left:70px;font-size:26px;"> OR </div>
         <div class="col-md-3">
           <div class="input-group">
             <input class="form-control" type="text" placeholder="Lecture #" id="id">
