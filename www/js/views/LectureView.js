@@ -91,10 +91,11 @@ define(function(require) {
             paper.setup(canvas);
 
             var tool = new paper.Tool();
-            var myPath;
+            var paths = [];
+	    var numPaths = -1;
 	    var marker = {
 		strokeColor: 'black', 
-		strokeWidth: '4',
+		strokeWidth: '2',
 		strokeCap: 'round',
 		oldWidth: '2',
 		oldColor: 'black'
@@ -121,73 +122,105 @@ define(function(require) {
 		rows: 5,
 		color: ['black', "#ADBEEF", "#345678", '#00FF00', "#00FFFF", "#FF00FF", "#FFFF00", "#555555", "#FF0000", "#0000FF"]
 	    };
-
-            tool.onMouseDown = function(event) {
-                // Add a segment to the path at the position of the mouse:
-		        myPath = new paper.Path();
-		        switchMarker(myPath, marker);
-		        console.log(specialPoints(event.point));
-		        if(specialPoints(event.point) == 0)
-                    myPath.add(event.point);
-		        else{
-		            updateMarker(specialPoints(event.point), marker);
-		            switchMarker(myPath, marker);
-		        }
-	        }
+	    
+	    function mouseevent(event) {
+		return {type: event.type,
+			point: event.point
+		       };
+	    }
 
 
-            tool.onMouseDrag = function(event) {
-                //Continue adding segments to path at position of mouse:
-		        if(specialPoints(event.point) == 0)
-                    myPath.add(event.point);
+            function mousedown(point) {
+		// Add a segment to the path at the position of the mouse:
+		//var point = new paper.Point(event.point[1], event.point[2]);
+		//console.log(point);
+		numPaths++;
+		paths[numPaths] = new paper.Path();
+
+		switchMarker(paths[numPaths], marker);
+		console.log(specialPoints(point));
+		if(specialPoints(point) == 0)
+                    paths[numPaths].add(point);
 		else{
-		    if(myPath.segments.length != 0){
-			myPath = new paper.Path();
+		    updateMarker(specialPoints(point), marker);
+		            switchMarker(paths[numPaths], marker);
+		}
+		paper.view.draw();
+		console.log("start...");
+	    }
+	    
+	    
+            function mousedrag(point) {
+		//var point = new paper.Point(event.1, event.2);
+                //Continue adding segments to path at position of mouse:
+		if(specialPoints(point) == 0)
+		    paths[numPaths].add(point);
+		else{
+		    if(paths[numPaths].segments.length != 0){
+			numPaths++;
+			paths[numPaths] = new paper.Path();
 			console.log("made a path");
 		    }
 		}
-		if(myPath.segments.length == 1 && specialPoints(event.point) == 0)
-		{
-		    myPath = new paper.Path();
-		    switchMarker(myPath, marker);
-		    console.log("pathb type");
-		    myPath.add(event.point)
-		}
+		paper.view.draw();
+		console.log("drawing...");
 	    }
-
-            tool.onMouseUp = function(event) {
+	    
+            function mouseup(point) {
+		//var point = new paper.Point(event.1, event.2);
                 //Should stop tracking points;
-		if(specialPoints(event.point) == 0)
+		if(specialPoints(point) == 0)
                 {
-		    myPath.add(event.point);
-		    if(myPath.segments.length < 4)
+		    paths[numPaths].add(point);
+		    if(paths[numPaths].segments.length < 4)
 		    {
-			myPath.add(new paper.Point(event.point.x+1, event.point.y));
+			paths[numPaths].add(new paper.Point(point.x + 1, point.y));
 		    }
 		}
+		paper.view.draw();
+		console.log("done!...");
             }
 
+
+            tool.onMouseDown = function(event) {
+                // Add a segment to the path at the position of the mouse:
+		mousedown(event.point);
+		sendBoard(mouseevent(event));
+	    }
+	    
+	    
+            tool.onMouseDrag = function(event) {
+                //Continue adding segments to path at position of mouse:
+		mousedrag(event.point);
+		sendBoard(mouseevent(event));
+	    }
+	    
+            tool.onMouseUp = function(event) {
+		mouseup(event.point);
+		sendBoard(mouseevent(event));
+            }
+	    
 	    function switchMarker(myPath, marker){
 		myPath.strokeColor = marker.strokeColor;
 		myPath.strokeWidth = marker.strokeWidth;
 		myPath.strokeCap = marker.strokeCap;
 	    }
-
+	    
 	    function drawRoundedSquare(corner, size){
 		var rectangle = new paper.Rectangle(corner, size);
 		var cornerSize = new paper.Size(5, 5);
 		return new paper.Path.Rectangle(rectangle, cornerSize);
 	    }
-
+	    
 	    function drawSidebar(sidebarInfo){
 		var strokeColor = 'black';
 		var strokeWidth = '1';
 		var r = sidebarInfo.radius;
 		var side = 2*r;
 		//Draws eraser.
-//		var incpath = drawRoundedSquare(new paper.Point(;
-
-
+		//		var incpath = drawRoundedSquare(new paper.Point(;
+		
+		
 		var incpath = drawRoundedSquare(new paper.Point(sidebarInfo.plusX - r, sidebarInfo.plusY - r) ,
 						new paper.Size(side, side));
 		incpath.strokeColor = strokeColor;
@@ -195,12 +228,12 @@ define(function(require) {
 		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2); 
 		circbg.strokeColor = strokeColor;
 		circsm.strokeColor = strokeColor;
-    
+		
 		//Draws small.
 		var decpath = drawRoundedSquare(new paper.Point(sidebarInfo.minusX - r, sidebarInfo.minusY - r),
 						new paper.Size(side, side));
 		decpath.strokeColor = strokeColor;
-
+		
 		//Loops through colors and draws colors. Fills colors with colors.
 		var ipath = [];
 		for(var i = 0; i < (2 * sidebarInfo.rows); i++){
@@ -214,9 +247,9 @@ define(function(require) {
 		    //console.log(col, row, side);
 		    ipath[i].fillColor = sidebarInfo.color[i];
 		}
-
+		
 		var e = drawRoundedSquare(new paper.Point(sidebarInfo.eX - r, sidebarInfo.eY - r) ,
-					      new paper.Size(side, side));
+					  new paper.Size(side, side));
 		e.strokeColor = 'black';
 		var e0 = new paper.Point(sidebarInfo.eX - (r/2), sidebarInfo.eY);
 		var e1 = new paper.Point(sidebarInfo.eX + (r/2), sidebarInfo.eY);
@@ -225,8 +258,8 @@ define(function(require) {
 		minus.lineTo(e1);
 		minus.strokeColor = 'black';
 	    }
-
-
+	    
+	    
 	    function specialPoints(p){
 		var r = sidebarInfo.radius;
 		var rr = sidebarInfo.box / 2; //this is a slightly bigger version of r
@@ -247,7 +280,7 @@ define(function(require) {
 		    sidebarInfo.minusY - rr < p.y && p.y < sidebarInfo.minusY + rr){
 		    return -1;
 		}
-
+		
 		if( sidebarInfo.eX - rr < p.x && p.x < sidebarInfo.eX + rr &&
 		    sidebarInfo.eY - rr < p.y && p.y < sidebarInfo.eY + rr){
 		    return -2;
@@ -291,24 +324,40 @@ define(function(require) {
 		}
 	    }
 
-	    drawSidebar(sidebarInfo);
-//            paper.view.draw();
- 
-	    // function sendBoard(){
-	    // 	socket.emit("board", bigArray, .. );
-	    // }
-	    // function drawBoard(bigArray){
-	    // 	do everything;
-	    // }
-	    // socket.on('nameofevent', drawBoard);
+	    function drawBoard(event){
+		console.log(event.point[1], event.point[2]);
+		var pt = new paper.Point(event.point[1], event.point[2]);
+		
+		if(event.type === 'mousedown'){
+		    mousedown(pt);
+		}
+		if(event.type === 'mouseup'){
+		    mouseup(pt);
+		}
+		if(event.type === 'mousedrag'){
+		    mousedrag(pt);
+		}
+		// pathsIn = JSON.parse(pathsIn);
+		// pathsIn = _.map(pathsIn, function(arr) {
+		//     return new paper.Path(arr[1]);
+		// });
+		// console.log(paths, " =? ", pathsIn);
+		// paths = pathsIn;
+		// numPaths = paths.length;
+	    }
 
-	    //socket.admin
+	    function sendBoard(event){
+	    	socket.emit("boardOut", mouseevent(event));
+	    }
 
-            //this.$('canvas').attr({width: '750', height: '400'});
 
+	    if(this.state.get("admin")){
+		drawSidebar(sidebarInfo);
+ 	    }
 
-            paper.view.draw();
-        },
+	    socket.on('boardIn', drawBoard);
+	    
+	},
 
         initVideo: function() {
 	    var apiKey = "40476162";
