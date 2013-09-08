@@ -88,6 +88,7 @@ function join(socket, admin) {
             socket.admin = args.adminOverride;
         }
 
+
         var info = {
             'id':socket.room,
             'admin':socket.admin,
