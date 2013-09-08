@@ -45,9 +45,17 @@
         <h4 class="modal-title">Lecture settings</h4>
       </div>
       <div class="modal-body">
-        <input type="text" placeholder="Your name" id="name"><br /><br />
-        To use a PowerPoint, load it from your Google Drive.<br />
-        <button class="btn" id="pick">Choose PPT</button> <span id="ppt"></span>
+        <div class="form-group">
+          <label for="name">Your name</label>
+          <input type="text" class="form-control" placeholder="Your name" id="name">
+        </div>
+        <div class="form-group">
+          <label for="slides">Slides (not required)</label>
+          <div class="row" style="margin: 0;">
+            <button class="btn col-md-6" id="pick">Choose PPT</button> <div class="col-md-6" id="ppt"></div>
+          </div>
+          <p class="help-block">To use a PowerPoint, load it from your Google Drive.</p>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="new" data-dismiss="modal">Create</button>

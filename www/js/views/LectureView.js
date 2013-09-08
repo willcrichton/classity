@@ -13,8 +13,8 @@ define(function(require) {
         events: {
             'click #name-update' : 'updateName',
             'click .nav-tabs a'  : 'updateTab',
-            'click #next'        : 'nextSlide',
-            'click #prev'        : 'prevSlide',
+            'click .arrow.right' : 'nextSlide',
+            'click .arrow.left'  : 'prevSlide',
             'click #download'    : 'downloadWindow',
             'submit #chatbox'    : 'chat',
             'submit #join-form'  : 'updateName',
@@ -37,7 +37,7 @@ define(function(require) {
         updateClients: function() {
             this.$('#clients').html('');
             _.forEach(this.state.get('clients'), function(client) {
-                if (client === this.state.get('name')) {
+                if (client === this.state.get('name') || client == this.state.get('profName')) {
                     return;
                 }
 
@@ -518,7 +518,7 @@ define(function(require) {
                 this.$('#column-right div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
-                this.$('#ssbuttonsHider').hide();
+                this.$('.arrow').hide();
             }
 
             return this;
