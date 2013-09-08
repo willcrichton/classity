@@ -12,7 +12,7 @@ define(function(require) {
             'click #answer-question' : 'answerQuestion',
             'click #pose-question'   : 'poseQuestion',
             'click #add-answer'      : 'addAnswer',
-            'click .remove-answer'   : 'removeAnswer'
+            'click .remove-answer'   : 'removeAnswer',
         },
 
         initialize: function(options) {

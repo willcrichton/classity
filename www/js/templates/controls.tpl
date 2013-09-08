@@ -25,7 +25,7 @@
             <div id="answers" class="col-md-10"></div>
         </form>
         </div>
-
+        
         <div class="modal-footer">
           <button type="button" class="btn" id="pose-question" data-dismiss="modal">Pose Question</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

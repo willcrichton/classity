@@ -17,7 +17,6 @@ define(function(require) {
 
         events: {
             'click #name-update' : 'updateName',
-            'click .nav-tabs a'  : 'updateTab',
             'click .arrow.right' : 'nextSlide',
             'click .arrow.left'  : 'prevSlide',
             'click #download'    : 'downloadWindow',
@@ -450,7 +449,7 @@ define(function(require) {
 
         // for when we receive tab change from professor
         changeTab: function() {
-            this.$('nav a[href=#' + this.state.get('tab') + ']').tab('show');
+            $('nav a[href=#' + this.state.get('tab') + ']').tab('show');
         },
 
         chat: function(e) {
@@ -532,11 +531,14 @@ define(function(require) {
             });
 
             $('.logo > .row > *').css('display', 'block');
+            var self = this;
             $('nav a').click(function(e) {
                 e.preventDefault();
                 if (!$(this).hasClass('pull-right')) {
                     $('nav a').removeClass('active');
                     $(this).addClass('active');
+                    $(this).tab('show');
+                    self.updateTab(e);
                 }
             });
 
@@ -559,7 +561,7 @@ define(function(require) {
             this.$('#chatbox input').attr('placeholder', this.state.get('name') + ':');
 
             if (this.state.get('admin')) {
-                this.$('#column-right div:first-child').hide();
+                this.$('#column-right > div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
                 this.$('.arrow').hide();
