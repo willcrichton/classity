@@ -534,8 +534,26 @@ define(function(require) {
             $('.logo > .row > *').css('display', 'block');
             $('nav a').click(function(e) {
                 e.preventDefault();
-                $('nav a').removeClass('active');
-                $(this).addClass('active');
+                if (!$(this).hasClass('pull-right')) {
+                    $('nav a').removeClass('active');
+                    $(this).addClass('active');
+                }
+            });
+
+            $('nav .pull-right').popover({placement: 'bottom'});
+            $('nav .pull-right').attr('data-clipboard-text', 'test?');
+            var clip = new ZeroClipboard($('nav .pull-right')[0], {
+                moviePath: '/js/vendor/ZeroClipboard.swf'
+            });
+
+            var opened = false;
+            clip.on('mousedown', function() {
+                if (!opened) {
+                    $('nav .pull-right').popover('show');
+                } else {
+                    $('nav .pull-right').popover('hide');
+                }
+                opened = !opened;
             });
 
             if (this.state.get('admin')) {

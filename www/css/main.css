@@ -8822,6 +8822,9 @@ nav a.active {
   margin-top: 0;
   font-size: 80px;
 }
+.popover {
+  color: black;
+}
 #column-left {
   height: 570px;
   border-right: 1px solid #cccccc;
