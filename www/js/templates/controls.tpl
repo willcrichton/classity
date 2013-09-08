@@ -3,7 +3,7 @@
 <button type="button" class="btn btn-lg btn-primary" id="admin-question" data-toggle="modal" href="#admin-modal">Pose a question <i class="glyphicon glyphicon-question-sign"></i></button>
 
 <div class="modal" id="admin-modal">
-    <div class="modal-dialog">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -24,11 +24,31 @@
             </div>
             <div id="answers" class="col-md-10"></div>
         </form>
-      </div>
+        </div>
 
+        <div class="modal-footer">
+          <button type="button" class="btn" id="pose-question" data-dismiss="modal">Pose Question</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="results-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Question Results</h4>
+      </div>
+      <div class="modal-body">
+        <p>Prompt: <span id="results-prompt"></span></p>
+        <ol id="results-answers"></ol>
+        <canvas id="results-chart" width="520" height="200"></canvas>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn" id="pose-question" data-dismiss="modal">Pose Question</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -51,7 +71,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="ask-question" data-dismiss="modal">Send Question</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -69,7 +89,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="answer-question" data-dismiss="modal">Submit Answer</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -37,7 +37,8 @@ define(function(require){
                     tab: '',
                     lastMessage: '',
                     questions: [],
-                    answers: []
+                    answers: [],
+                    posedAnswers: []
                 }
             }
         }))();
@@ -103,5 +104,17 @@ define(function(require){
             state.set('SSUrl', url);
         });
 
+        socket.on('questionPosed', function(question, answers) {
+            state.trigger('newQuestion', question, answers);
+        });
+
+        socket.on('posedAnswer', function(username, answer) {
+            var answers = state.get('posedAnswers');
+            answers.push([username, answer]);
+            state.set('posedAnswers', answers);
+            if (answers.length == state.get('clients').length - 1) {
+                state.trigger('allAnswersReceived');
+            }
+        });
     });
 });

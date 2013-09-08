@@ -80,3 +80,20 @@
   </div>
 </div>
 
+<div class="modal" id="posed-question">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">The instructor has asked a question</h4>
+      </div>
+      <div class="modal-body">
+        <p id="prompt"></p>
+        <table id="answers" class="table"></table>
+      </div>
+      <div class="modal-footer">
+        <button type="btn" class="btn" data-dismiss="modal" id="question-submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+

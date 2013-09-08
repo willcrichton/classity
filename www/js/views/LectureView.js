@@ -17,7 +17,8 @@ define(function(require) {
             'click #prev'        : 'prevSlide',
             'click #download'    : 'downloadWindow',
             'submit #chatbox'    : 'chat',
-            'submit #join-form'  : 'updateName'
+            'submit #join-form'  : 'updateName',
+            'click #question-submit' : 'submitAnswer'
         },
 
         initialize: function(options) {
@@ -30,6 +31,7 @@ define(function(require) {
             this.listenTo(this.state, 'change:lastMessage', this.onChat);
             this.listenTo(this.state, 'notification', this.notification);
             this.listenTo(this.state, 'change:SSUrl', this.changeSlide);
+            this.listenTo(this.state, 'newQuestion', this.newQuestion);
         },
 
         updateClients: function() {
@@ -347,7 +349,7 @@ define(function(require) {
         },
 
         initPresentation: function() {
-            if (this.state.get('SSUrl')) {
+            if (this.state.get('SSUrl') && this.state.get('SSUrl').indexOf('undefined') === -1) {
                 this.$('iframe').attr('src', this.state.get('SSUrl'));
             } else {
                 $('#presentation, a[href=#presentation]').hide();
@@ -428,6 +430,22 @@ define(function(require) {
 
         changeSlide: function() {
             this.$('iframe').attr('src', this.state.get('SSUrl'));
+        },
+
+        newQuestion: function(question, answers) {
+            this.$('#prompt').html(question);
+
+            this.$('#answers').html('');
+            _.forEach(answers, function(answer, index) {
+                this.$('#answers').append('<tr><td><input type="radio" name="posedQuestion" value="' + index + '"/><td>' + answer + '</td></tr>');
+            }, this);
+
+            this.$('#posed-question').modal();
+        },
+
+        submitAnswer: function() {
+            var answer = this.$('#posed-question input[type=radio]:checked');
+            socket.emit('posedAnswer', answer.val());
         },
 
         render: function() {

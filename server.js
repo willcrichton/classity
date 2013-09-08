@@ -162,6 +162,17 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
+    socket.on('poseQuestion', function(question, answers, correctIndex) {
+        socket.broadcast.to(socket.room).emit('questionPosed', question, answers);
+    });
+
+    socket.on('posedAnswer', function(answer) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('posedAnswer', socket.username, answer);
+        }
+    });
+
     tabs.forEach(function(tab) {
         tabType.init(socket);
     });
