@@ -14,16 +14,18 @@ var _ = require('underscore');
 var whiteboardData;
 
 var ids = [];
+
+function rnd() {
+    return parseInt(Math.random()*100000).toString();
+}
+
 function newID() {
-    if(ids.length === 0) {
-        ids.push('0');
-        return '0';
-    } else {
-        var lastID = ids[ids.length-1];
-        var id = (parseInt(lastID) + 1).toString();
-        ids.push(id);
-        return id;
+    var id = rnd();
+    while(ids.indexOf(id) !== -1) {
+        id = rnd();
     }
+    ids.push(id);
+    return id;
 }
 
 function usernames(id) {
@@ -51,7 +53,11 @@ function profSSUrl(id) {
             SSindex = socket.SSindex;
         }
     });
-    return SSUrl + '#slide=' + SSindex;
+    if(SSUrl !== undefined && SSindex !== undefined) {
+        return SSUrl + '#slide=' + SSindex;
+    } else {
+        return undefined;
+    }
 }
 
 function getProf(id) {
@@ -75,33 +81,40 @@ function join(socket, admin) {
         socket.room = args.id;
         socket.username = args.username;
         if(args.adminOverride === undefined) {
+            console.log('no override');
             socket.admin = admin;
         } else {
+            console.log('override');
             socket.admin = args.adminOverride;
         }
 
-        var SSUrl;
-        if(args.SSUrl === undefined || args.SSUrl === null) {
-            SSUrl = profSSUrl(args.id);
-        } else {
-            console.log(args.SSUrl);
-            var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
-            socket.SSUrl = theMatch[1];
-            socket.SSindex = parseInt(theMatch[2]);
-            SSUrl = args.SSUrl;
+        var info = {
+            'id':socket.room,
+            'admin':socket.admin,
+            'clients': usernames(socket.room),
+            'profVideo': profVideo(socket.room),
+            'profName': prof ? prof.username : '',
+            'username': socket.username,
+            'whiteboardData': whiteboardData
         }
 
-        var prof = getProf(args.id);
-	socket.emit('joinedRoom', {
-            'id':args.id,
-            'admin':socket.admin,
-            'clients': usernames(args.id),
-            'profVideo': profVideo(args.id),
-            'profName': prof ? prof.username : '',
-            'name': args.username,
-            'SSUrl': SSUrl,
-            'whiteboardData': whiteboardData
-        });
+        if((!socket.admin) || args.SSUrl === undefined || args.SSUrl === null) {
+            url = profSSUrl(args.id);
+            if(profSSUrl !== undefined) {
+                info.SSUrl = url;
+            }
+        } else {
+            var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
+            if(theMatch !== undefined && theMatch !== null) {
+                socket.SSUrl = theMatch[1];
+                socket.SSindex = parseInt(theMatch[2]);
+                console.log('using ' + args.SSUrl);
+                info.SSUrl = args.SSUrl;
+            }
+        }
+
+        var prof = getProf(socket.room);
+	socket.emit('joinedRoom', info);
         socket.broadcast.to(args.id).emit('clientsChanged', usernames(args.id));
     };
 }

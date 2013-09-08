@@ -8,6 +8,9 @@ define(function(require) {
     ControlsView = require('views/ControlsView');
 
     function repl(str, num) {
+        if(str === undefined) {
+            return undefined;
+        }
         var d = parseInt(str.match(/#slide=(\d+)/)[1]);
         return str.replace(/#slide=\d+/, '#slide=' + (Math.max(1, d+num)));
     }
@@ -97,7 +100,7 @@ define(function(require) {
 	initWhiteboard: function() {
 	    var boards, current;
 	    if(this.state !== undefined && this.state.info !== undefined &&
-	       this.state.info.whiteboardData !== undefined && this.state.info.whiteboardData.boards !== undefined 
+	       this.state.info.whiteboardData !== undefined && this.state.info.whiteboardData.boards !== undefined
 	       && this.state.info.whiteboardData.current !== undefined){
 		boards = this.state.info.whiteboardData.boards;
 		current = this.state.info.whiteboardData.current;
@@ -182,7 +185,7 @@ define(function(require) {
 		paper.view.draw();
 		console.log("start...");
 	    }
-	    
+
             function mousedrag(point) {
 		        //var point = new paper.Point(event.1, event.2);
                 //Continue adding segments to path at position of mouse:
@@ -220,7 +223,7 @@ define(function(require) {
 		    mousedown(event.point);
 		    sendBoard(mouseevent(event));
 		}
-		
+
 	    }
 
             tool.onMouseDrag = function(event) {
@@ -257,8 +260,8 @@ define(function(require) {
 		var side = 2*r;
 
 		//Draws the big and small sizes icons.
-		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5); 
-		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2); 
+		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5);
+		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2);
 		var decpath = drawRoundedSquare(new paper.Point(sidebarInfo.minusX - r, sidebarInfo.minusY - r),
 						new paper.Size(side, side));
 		var incpath = drawRoundedSquare(new paper.Point(sidebarInfo.plusX - r, sidebarInfo.plusY - r) ,
@@ -266,10 +269,10 @@ define(function(require) {
 		incpath.strokeColor = strokeColor;
 		circbg.strokeColor = strokeColor;
 		circsm.strokeColor = strokeColor;
-		decpath.strokeColor = strokeColor;		
-						
+		decpath.strokeColor = strokeColor;
+
 		//Draws eraser
-		
+
 		var e = drawRoundedSquare(new paper.Point(sidebarInfo.eX - r, sidebarInfo.eY - r) ,
 					  new paper.Size(side, side));
 		e.strokeColor = 'black';
@@ -285,9 +288,9 @@ define(function(require) {
 		minus.closed = true;
 		minus.strokeColor = 'black';
 		minus.fillColor = 'pink';
-		
+
 		//Draws navigation icons
-		
+
 		var add = drawRoundedSquare(new paper.Point(sidebarInfo.newX - r, sidebarInfo.newY - r) ,
 					  new paper.Size(side, side));
 		add.strokeColor = 'black';
@@ -307,7 +310,7 @@ define(function(require) {
 		le.moveTo(new paper.Point(sidebarInfo.backX + (r/8), sidebarInfo.backY - (r/2)));
 		le.lineTo(new paper.Point(sidebarInfo.backX - (r/2), sidebarInfo.backY));
 		le.lineTo(new paper.Point(sidebarInfo.backX + (r/8), sidebarInfo.backY + (r/2)));
-		le.strokeColor = 'black'; 
+		le.strokeColor = 'black';
 		var forw = drawRoundedSquare(new paper.Point(sidebarInfo.forX - r, sidebarInfo.forY - r) ,
 					  new paper.Size(side, side));
 		forw.strokeColor = 'black';
@@ -335,11 +338,11 @@ define(function(require) {
 	    function specialPoints(p){
 		var r = sidebarInfo.radius;
 		var rr = sidebarInfo.box / 2; //this is a slightly bigger version of r
-		if((p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr || 
+		if((p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr ||
 		              p.y < sidebarInfo.plusX - rr || p.y > sidebarInfo.rows * sidebarInfo.box + sidebarInfo.offset
 		    || (p.x < sidebarInfo.plusX - rr && p.y < sidebarInfo.offset) || (p.x > sidebarInfo.plusX + rr && p.y < sidebarInfo.offset))){
 		    //console.log("safe");
-		    
+
 		    if(p.x > sidebarInfo.plusX + 3*rr || p.x < sidebarInfo.sca1 - rr || p.y > sidebarInfo.newY + rr || p.y < sidebarInfo.newY - rr){
 		    return 0;
 		    }
@@ -361,12 +364,12 @@ define(function(require) {
 		if( sidebarInfo.forX - rr  < p.x && p.x < sidebarInfo.forX  + rr &&
 		    sidebarInfo.forY - rr < p.y && p.y < sidebarInfo.forY + rr){
 		    return 3;
-		} 
+		}
 		if( sidebarInfo.backX - rr < p.x && p.x < sidebarInfo.backX + rr  &&
 		    sidebarInfo.backY - rr < p.y && p.y < sidebarInfo.backY + rr){
 		    return -3;
 		}
-		
+
 		if( sidebarInfo.newX - rr < p.x && p.x < sidebarInfo.newX + rr &&
 		    sidebarInfo.newY - rr < p.y && p.y < sidebarInfo.newY + rr){
 		 return 5;
@@ -428,7 +431,7 @@ define(function(require) {
 		    mousedrag(pt);
 		}
 	    }
-	    
+
 	    function setInvisible(paths, boo){
 		if(paths !== undefined){
 		    for(var i = 0; i < paths.length; i++){
@@ -474,8 +477,8 @@ define(function(require) {
 
  // initAllBoards: function() {
  //     var boards = [];
- //     var current = 0;	 
-  
+ //     var current = 0;
+
  // 	var changes = [];
  //     var loadBoard = _.bind(function(change) {
  // 	    changes.push(change);
@@ -490,13 +493,13 @@ define(function(require) {
  // 	    }
  //         console.log(current, changes);
  // 	 initWhiteboard(boards[current]);
-	
+
  //     }, this);
  //     var initWhiteboard = _.bind(this.initWhiteboardProto,this, loadBoard);
  // 	loadBoard(0);
-  
+
  // },
-	
+
 
 
 
@@ -538,7 +541,7 @@ define(function(require) {
             if (this.state.get('SSUrl') && this.state.get('SSUrl').indexOf('undefined') === -1) {
                 this.$('iframe').attr('src', this.state.get('SSUrl'));
                 $('#presentation, a[href=#presentation]').show();
-            } 
+            }
         },
 
         checkPermissions: function() {
@@ -546,14 +549,18 @@ define(function(require) {
                 if (localStorage.hasOwnProperty('info')) {
                     console.log('we have some old data: ' + localStorage.info);
                     var info = JSON.parse(localStorage.info);
+                    // if(info.hasOwnProperty('id') && this.state.id === info.id) { TODO
+                    // if(info.hasOwnProperty('id') && (new Date()).getTime() - info.time > 60000) {
                     if(info.hasOwnProperty('id')) {
                         this.state.set(info);
-                        socket.emit('joinRoom', {
-                          'id':info.id,
-                          'username':this.state.get('name'),
-                          'adminOverride':this.state.get('admin'),
-                          'SSUrl':this.state.get('SSUrl')
-                        });
+                        info.adminOverride = info.admin;
+                        socket.emit('joinRoom', info);
+                        //socket.emit('joinRoom', {
+                          //'id':info.id,
+                          //'username':this.state.get('name'),
+                          //'adminOverride':info.adminOverride,
+                          //'SSUrl':this.state.get('SSUrl')
+                        //});
                     }
                 } else {
                     this.$('#join-lecture').modal();
@@ -611,6 +618,9 @@ define(function(require) {
         nextSlide: function() {
             socket.emit('advanceSlide', 1);
             var info = JSON.parse(localStorage.info);
+            if(info.SSUrl === undefined) {
+                console.log('advancing slide, but no SSUrl');
+            }
             info.SSUrl = repl(info.SSUrl, 1);
             localStorage.info = JSON.stringify(info);
         },
@@ -619,6 +629,9 @@ define(function(require) {
             socket.emit('advanceSlide', -1);
             var info = JSON.parse(localStorage.info);
             info.SSUrl = repl(info.SSUrl, -1);
+            if(info.SSUrl === undefined) {
+                console.log('advancing slide, but no SSUrl');
+            }
             localStorage.info = JSON.stringify(info);
         },
 
