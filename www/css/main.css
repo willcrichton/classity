@@ -8829,8 +8829,14 @@ h1 {
   padding-top: 3px;
   text-align: center;
 }
+.panel #column-left .tab-content #download {
+  float: right;
+}
 .panel #column-left #controls {
   text-align: center;
+}
+.panel #column-left #controls .modal {
+  text-align: left;
 }
 .panel #column-left #notification {
   position: absolute;
@@ -8868,6 +8874,9 @@ h1 {
 }
 .panel #column-right #clients .question {
   cursor: pointer;
+}
+.panel #column-right #clients.tall {
+  height: 510px;
 }
 canvas {
   background: white;

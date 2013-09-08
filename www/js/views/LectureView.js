@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var 
+    var
     _        = require('Underscore'),
     Backbone = require('Backbone'),
     template = require('text!templates/lecture.tpl'),
@@ -15,19 +15,23 @@ define(function(require) {
             'click .nav-tabs a'  : 'updateTab',
             'click #next'        : 'nextSlide',
             'click #prev'        : 'prevSlide',
-            'submit #chatbox'    : 'chat'
+            'click #download'    : 'downloadWindow',
+            'submit #chatbox'    : 'chat',
+            'submit #join-form'  : 'updateName',
+            'click #question-submit' : 'submitAnswer'
         },
 
         initialize: function(options) {
             this.template = _.template(template);
             this.state = this.options.state;
-            
+            this.listenTo(this.state, 'change:clients', this.updateClients);
             this.listenTo(this.state, 'change:clients change:questions change:answers', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
             this.listenTo(this.state, 'change:tab', this.changeTab);
             this.listenTo(this.state, 'change:lastMessage', this.onChat);
             this.listenTo(this.state, 'notification', this.notification);
             this.listenTo(this.state, 'change:SSUrl', this.changeSlide);
+            this.listenTo(this.state, 'newQuestion', this.newQuestion);
         },
 
         updateClients: function() {
@@ -128,8 +132,6 @@ define(function(require) {
 			point: event.point
 		       };
 	    }
-
-
             function mousedown(point) {
 		// Add a segment to the path at the position of the mouse:
 		//var point = new paper.Point(event.point[1], event.point[2]);
@@ -360,18 +362,15 @@ define(function(require) {
 	},
 
         initVideo: function() {
-	    var apiKey = "40476162";
-            var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
-            var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz02NDE3YTI3YjhkMDhkNmYwMDAxOTUwZGZkYmZiODNjMTM1NjliNmFjOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtUm5KcElGTmxjQ0F3TmlBeE9Ub3hPVG94TXlCUVJGUWdNakF4TTM0d0xqVTBNemszTmpGLSZjcmVhdGVfdGltZT0xMzc4NTIwMzUzJm5vbmNlPTAuMzU2ODIwNjI1MjY5ODU1NiZleHBpcmVfdGltZT0xMzc4NjA2NzUzJmNvbm5lY3Rpb25fZGF0YT0=";
-            
+	        var apiKey = "40476162";
+            var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-U2F0IFNlcCAwNyAxOTo0MDo1NCBQRFQgMjAxM34wLjM1OTI1ODIzfg";
+            var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz1mMDA5ZDU0N2U4YWFlOTA5NmI1MDEwYjc4YTM2OTE2ODU4YmUwZDk3OnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtVTJGMElGTmxjQ0F3TnlBeE9UbzBNRG8xTkNCUVJGUWdNakF4TTM0d0xqTTFPVEkxT0RJemZnJmNyZWF0ZV90aW1lPTEzNzg2MDgwNTQmbm9uY2U9MC42Njk3MjM3NDAwODM5NjI1JmV4cGlyZV90aW1lPTEzNzg2OTQ0NTQmY29ubmVjdGlvbl9kYXRhPQ==";
+
             // Initialize session, set up event listeners, and connect
             var session = TB.initSession(sessionId);
             session.addEventListener('sessionConnected', sessionConnectedHandler.bind(this));
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
-
-            //var publisher = TB.initPublisher(apiKey, 'video', {width: 750, height: 562});
-            TB.setLogLevel(5);
 
             var w = 550, h = 465;
             function sessionConnectedHandler(event) {
@@ -397,7 +396,7 @@ define(function(require) {
         },
 
         initPresentation: function() {
-            if (this.state.get('SSUrl')) {
+            if (this.state.get('SSUrl') && this.state.get('SSUrl').indexOf('undefined') === -1) {
                 this.$('iframe').attr('src', this.state.get('SSUrl'));
             } else {
                 $('#presentation, a[href=#presentation]').hide();
@@ -406,7 +405,17 @@ define(function(require) {
 
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                this.$('#join-lecture').modal();
+                console.log('auth: ' + this.state.get('auth'));
+                if (localStorage.hasOwnProperty('info')) {
+                    console.log('we have some old data: ' + localStorage.info);
+                    var info = JSON.parse(localStorage.info);
+                    if(info.hasOwnProperty('id')) {
+                        this.state.set(info);
+                        socket.emit('joinRoom', info.id, this.state.get('name'), this.state.get('admin'));
+                    }
+                } else {
+                    this.$('#join-lecture').modal();
+                }
                 return false;
             }
 
@@ -414,6 +423,7 @@ define(function(require) {
         },
 
         updateName: function() {
+            this.$('#join-lecture').modal('hide');
             this.state.set('name', this.$('.modal input[type=text]').val());
             socket.emit('joinRoom', this.state.get('id'), this.$('.modal input[type=text]').val());
         },
@@ -461,8 +471,28 @@ define(function(require) {
             socket.emit('advanceSlide', -1);
         },
 
+        downloadWindow: function() {
+            window.open(this.state.get("downloadLink"), '_blank');
+        },
+
         changeSlide: function() {
             this.$('iframe').attr('src', this.state.get('SSUrl'));
+        },
+
+        newQuestion: function(question, answers) {
+            this.$('#prompt').html(question);
+
+            this.$('#answers').html('');
+            _.forEach(answers, function(answer, index) {
+                this.$('#answers').append('<tr><td><input type="radio" name="posedQuestion" value="' + index + '"/><td>' + answer + '</td></tr>');
+            }, this);
+
+            this.$('#posed-question').modal();
+        },
+
+        submitAnswer: function() {
+            var answer = this.$('#posed-question input[type=radio]:checked');
+            socket.emit('posedAnswer', answer.val());
         },
 
         render: function() {
@@ -488,7 +518,7 @@ define(function(require) {
                 this.$('#column-right div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
-                this.$('#ssbuttons').hide();
+                this.$('#ssbuttonsHider').hide();
             }
 
             return this;

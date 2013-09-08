@@ -74,13 +74,27 @@ function getProf(id) {
 }
 
 function join(socket, admin) {
-    return function(id, username) {
+    return function(id, username, adminOverride) {
+        if(!admin && io.sockets.clients('room').length === 0) {
+            socket.emit('joinedRoom', new Error('Cannot join lecture; room does not exist.'));
+        }
         socket.join(id);
         socket.room = id;
-        socket.username = username; 
-        socket.admin = admin;
+        socket.username = username;
+        if(adminOverride === undefined) {
+            socket.admin = admin;
+        } else {
+            socket.admin = adminOverride;
+        }
+	
         console.log('Set username ' + username);
-        socket.emit('joinedRoom', {'id':id, 'admin':socket.admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl(id) });
+	socket.emit('joinedRoom', {
+            'id':id,
+            'admin':socket.admin,
+            'clients': usernames(id),
+            'profVideo': profVideo(id),
+            'name': username,
+            'SSUrl': profSSUrl(id) });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
 }
@@ -130,7 +144,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('advanceSlide', function(increment) {
-        socket.SSindex += increment;
+        socket.SSindex = Math.max(socket.SSindex += increment, 1);
         sendUpdatePresentation(socket);
     })
 
@@ -149,6 +163,17 @@ io.sockets.on('connection', function(socket) {
         var prof = getProf(socket.room);
         if (prof) {
             prof.emit('answerGiven', socket.username, answer);
+        }
+    });
+
+    socket.on('poseQuestion', function(question, answers, correctIndex) {
+        socket.broadcast.to(socket.room).emit('questionPosed', question, answers);
+    });
+
+    socket.on('posedAnswer', function(answer) {
+        var prof = getProf(socket.room);
+        if (prof) {
+            prof.emit('posedAnswer', socket.username, answer);
         }
     });
 

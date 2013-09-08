@@ -41,12 +41,9 @@ define(function(require) {
                 onSelect: (function(file) {
                     this.$('#ppt').html(file.title + ' <i class="glyphicon glyphicon-ok"></i>');
                     this.presentation = file.embedLink;
+                    this.state.set("downloadLink", file.exportLinks["application/pdf"]);
                 }).bind(this)
             }); 
-
-            // socket.on('updatePresentation', function(newUrl) {
-            //       $('#slideShowFrame').attr("src", newUrl);
-            // })
 
             //SECOND BUTTON?
             // var picker2 = new FilePicker({
@@ -60,16 +57,6 @@ define(function(require) {
             //         //Should pass file embed link to server.
             //     }
             // }); 
-
-            //Specification: Proffessor will select slideshow, the frontend will send the url and the slide # to the backend
-            //the backend will run the update function that makes everybody's Iframes show the correct slideshow and frame.
-            //The proffessors prev and next buttons should also tell the backend to increment or decrement the backend slide 
-            //variable by one, the backend will then again run the update function. 
-
-            //All three lines should be called the first time, and then only the last line should be called on every slide update.
-            //  $('#middle').append($('<iframe id = "reload"></iframe>'));
-            //  $('#middle').append($('<div id = cover> </div>'));
-            //  $('#reload').attr("src", url);
 
             return this;
         }

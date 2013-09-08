@@ -19,8 +19,11 @@
                 <iframe id = "slideShowFrame" class="col-md-10"></iframe>  
               </div>
               <div id = "ssbuttons">
-                <button type="button" id="prev" class="btn">Previous</button> 
-                <button type="button" id="next" class="btn">Next</button>
+                <div id = "ssbuttonsHider">
+                  <button type="button" id="prev" class="btn">Previous</button> 
+                  <button type="button" id="next" class="btn">Next</button>
+                </div>
+                <button type="button" id="download" class="btn">Download Slideshow</button>
               </div>
             </div>
           </div>
@@ -52,7 +55,9 @@
         <h4 class="modal-title">Join the lecture</h4>
       </div>
       <div class="modal-body">
-        <input type="text" placeholder="What's your name?" id="name">
+        <form onsubmit="return false;" id="join-form">
+          <input type="text" placeholder="What's your name?" id="name">
+        </form>
       </div>
       <div class="modal-footer">
         <button type="btn" class="btn" data-dismiss="modal" id="name-update">Submit</button>
@@ -70,6 +75,23 @@
       <div class="modal-body"></div>
       <div class="modal-footer">
         <button type="btn" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="posed-question">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">The instructor has asked a question</h4>
+      </div>
+      <div class="modal-body">
+        <p id="prompt"></p>
+        <table id="answers" class="table"></table>
+      </div>
+      <div class="modal-footer">
+        <button type="btn" class="btn" data-dismiss="modal" id="question-submit">Submit</button>
       </div>
     </div>
   </div>
