@@ -108,7 +108,9 @@ define(function(require) {
 
         render: function() {
             this.$el.html(this.template(this.state.toJSON()));
-            this.chart = new Chart(this.$('#results-chart')[0].getContext('2d'));
+            if (this.$('#results-chart').length) {
+                this.chart = new Chart(this.$('#results-chart')[0].getContext('2d'));
+            }
             
             this.addAnswer();
             this.addAnswer();
