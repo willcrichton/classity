@@ -80,7 +80,7 @@ function join(socket, admin) {
         socket.username = username; 
         socket.admin = admin;
         console.log('Set username ' + username);
-        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl(id) });
+        socket.emit('joinedRoom', {'id':id, 'admin':socket.admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl(id) });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
 }
@@ -114,7 +114,11 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.to(socket.room).emit('profVideo', id);
         socket.videoId = id;
     });
-
+	
+    socket.on('boardOut', function(paths) {
+	socket.broadcast.to(socket.room).emit('boardIn', paths);
+    });
+    
     socket.on('changeTab', function(tab) {
         socket.broadcast.to(socket.room).emit('changeTab', tab);
     });
