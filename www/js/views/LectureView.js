@@ -361,7 +361,7 @@ define(function(require) {
                     var info = JSON.parse(localStorage.info);
                     if(info.hasOwnProperty('id')) {
                         this.state.set(info);
-                        socket.emit('joinRoom', info.id, this.state.get('name'));
+                        socket.emit('joinRoom', info.id, this.state.get('name'), this.state.get('admin'));
                     }
                 } else {
                     this.$('#join-lecture').modal();

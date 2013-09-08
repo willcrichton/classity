@@ -74,16 +74,27 @@ function getProf(id) {
 }
 
 function join(socket, admin) {
-    return function(id, username) {
+    return function(id, username, adminOverride) {
         if(!admin && io.sockets.clients('room').length === 0) {
             socket.emit('joinedRoom', new Error('Cannot join lecture; room does not exist.'));
         }
         socket.join(id);
         socket.room = id;
         socket.username = username;
-        socket.admin = admin;
+        if(adminOverride === undefined) {
+            socket.admin = admin;
+        } else {
+            socket.admin = adminOverride;
+        }
+
         console.log('Set username ' + username);
-        socket.emit('joinedRoom', {'id':id, 'admin':admin, 'clients': usernames(id), 'profVideo': profVideo(id), 'SSUrl': profSSUrl(id) });
+        socket.emit('joinedRoom', {
+            'id':id,
+            'admin':socket.admin,
+            'clients': usernames(id),
+            'profVideo': profVideo(id),
+            'name': username,
+            'SSUrl': profSSUrl(id) });
         socket.broadcast.to(id).emit('clientsChanged', usernames(id));
     };
 }
