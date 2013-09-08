@@ -74,28 +74,39 @@ function getProf(id) {
 }
 
 function join(socket, admin) {
-    return function(id, username, adminOverride) {
+    return function(args) {
         if(!admin && io.sockets.clients('room').length === 0) {
             socket.emit('joinedRoom', new Error('Cannot join lecture; room does not exist.'));
         }
-        socket.join(id);
-        socket.room = id;
-        socket.username = username;
-        if(adminOverride === undefined) {
+
+        socket.join(args.id);
+        socket.room = args.id;
+        socket.username = args.username;
+        if(args.adminOverride === undefined) {
             socket.admin = admin;
         } else {
-            socket.admin = adminOverride;
+            socket.admin = args.adminOverride;
         }
-	
-        console.log('Set username ' + username);
+
+        var SSUrl;
+        if(args.SSUrl === undefined || args.SSUrl === "undefined") {
+            SSUrl = profSSUrl(args.id);
+        } else {
+            var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
+            socket.SSUrl = theMatch[1];
+            socket.SSindex = parseInt(theMatch[2]);
+            SSUrl = args.SSUrl;
+        }
+
 	socket.emit('joinedRoom', {
-            'id':id,
+            'id':args.id,
             'admin':socket.admin,
-            'clients': usernames(id),
-            'profVideo': profVideo(id),
-            'name': username,
-            'SSUrl': profSSUrl(id) });
-        socket.broadcast.to(id).emit('clientsChanged', usernames(id));
+            'clients': usernames(args.id),
+            'profVideo': profVideo(args.id),
+            'name': args.username,
+            'SSUrl': SSUrl
+        });
+        socket.broadcast.to(args.id).emit('clientsChanged', usernames(args.id));
     };
 }
 
@@ -113,7 +124,7 @@ io.sockets.on('connection', function(socket) {
         console.log('New room ' + id);
         socket.SSUrl = args.presentation;
         socket.SSindex = 1;
-        join(socket, true)(id, args.username);
+        join(socket, true)({'id':id, 'username':args.username});
     });
 
     socket.on('disconnect', function() {
@@ -128,20 +139,20 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.to(socket.room).emit('profVideo', id);
         socket.videoId = id;
     });
-	
+
     socket.on('boardOut', function(paths) {
 	socket.broadcast.to(socket.room).emit('boardIn', paths);
     });
-    
+
     socket.on('changeTab', function(tab) {
         socket.broadcast.to(socket.room).emit('changeTab', tab);
     });
 
-    socket.on('setSlideShowUrl', function(SSUrl) {
+    /*socket.on('setSlideShowUrl', function(SSUrl) {
         socket.SSUrl = SSUrl;
         socket.SSindex = 1;
         sendUpdatePresentation(socket);
-    });
+    });*/
 
     socket.on('advanceSlide', function(increment) {
         socket.SSindex = Math.max(socket.SSindex += increment, 1);

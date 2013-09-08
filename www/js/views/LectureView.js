@@ -7,6 +7,11 @@ define(function(require) {
     template = require('text!templates/lecture.tpl'),
     ControlsView = require('views/ControlsView');
 
+    function repl(str, num) {
+        var d = parseInt(str.match(/#slide=(\d+)/)[1]);
+        return str.replace(/#slide=\d+/, '#slide=' + (Math.max(1, d+num)));
+    }
+
     return Backbone.View.extend({
         id: 'lecture',
 
@@ -98,7 +103,7 @@ define(function(require) {
             var paths = [];
 	    var numPaths = -1;
 	    var marker = {
-		strokeColor: 'black', 
+		strokeColor: 'black',
 		strokeWidth: '2',
 		strokeCap: 'round',
 		oldWidth: '2',
@@ -110,7 +115,7 @@ define(function(require) {
 		plusX: 75,
 		plusY: 75,
 	    };
-	    
+
 	    var sidebarInfo = {
 		radius: originInfo.radius,
 		box: originInfo.box,
@@ -126,7 +131,7 @@ define(function(require) {
 		rows: 5,
 		color: ['black', "#ADBEEF", "#345678", '#00FF00', "#00FFFF", "#FF00FF", "#FFFF00", "#555555", "#FF0000", "#0000FF"]
 	    };
-	    
+
 	    function mouseevent(event) {
 		return {type: event.type,
 			point: event.point
@@ -150,8 +155,8 @@ define(function(require) {
 		paper.view.draw();
 		console.log("start...");
 	    }
-	    
-	    
+
+
             function mousedrag(point) {
 		//var point = new paper.Point(event.1, event.2);
                 //Continue adding segments to path at position of mouse:
@@ -167,7 +172,7 @@ define(function(require) {
 		paper.view.draw();
 		console.log("drawing...");
 	    }
-	    
+
             function mouseup(point) {
 		//var point = new paper.Point(event.1, event.2);
                 //Should stop tracking points;
@@ -189,31 +194,31 @@ define(function(require) {
 		mousedown(event.point);
 		sendBoard(mouseevent(event));
 	    }
-	    
-	    
+
+
             tool.onMouseDrag = function(event) {
                 //Continue adding segments to path at position of mouse:
 		mousedrag(event.point);
 		sendBoard(mouseevent(event));
 	    }
-	    
+
             tool.onMouseUp = function(event) {
 		mouseup(event.point);
 		sendBoard(mouseevent(event));
             }
-	    
+
 	    function switchMarker(myPath, marker){
 		myPath.strokeColor = marker.strokeColor;
 		myPath.strokeWidth = marker.strokeWidth;
 		myPath.strokeCap = marker.strokeCap;
 	    }
-	    
+
 	    function drawRoundedSquare(corner, size){
 		var rectangle = new paper.Rectangle(corner, size);
 		var cornerSize = new paper.Size(5, 5);
 		return new paper.Path.Rectangle(rectangle, cornerSize);
 	    }
-	    
+
 	    function drawSidebar(sidebarInfo){
 		var strokeColor = 'black';
 		var strokeWidth = '1';
@@ -221,21 +226,21 @@ define(function(require) {
 		var side = 2*r;
 		//Draws eraser.
 		//		var incpath = drawRoundedSquare(new paper.Point(;
-		
-		
+
+
 		var incpath = drawRoundedSquare(new paper.Point(sidebarInfo.plusX - r, sidebarInfo.plusY - r) ,
 						new paper.Size(side, side));
 		incpath.strokeColor = strokeColor;
-		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5); 
-		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2); 
+		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5);
+		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2);
 		circbg.strokeColor = strokeColor;
 		circsm.strokeColor = strokeColor;
-		
+
 		//Draws small.
 		var decpath = drawRoundedSquare(new paper.Point(sidebarInfo.minusX - r, sidebarInfo.minusY - r),
 						new paper.Size(side, side));
 		decpath.strokeColor = strokeColor;
-		
+
 		//Loops through colors and draws colors. Fills colors with colors.
 		var ipath = [];
 		for(var i = 0; i < (2 * sidebarInfo.rows); i++){
@@ -249,7 +254,7 @@ define(function(require) {
 		    //console.log(col, row, side);
 		    ipath[i].fillColor = sidebarInfo.color[i];
 		}
-		
+
 		var e = drawRoundedSquare(new paper.Point(sidebarInfo.eX - r, sidebarInfo.eY - r) ,
 					  new paper.Size(side, side));
 		e.strokeColor = 'black';
@@ -260,12 +265,12 @@ define(function(require) {
 		minus.lineTo(e1);
 		minus.strokeColor = 'black';
 	    }
-	    
-	    
+
+
 	    function specialPoints(p){
 		var r = sidebarInfo.radius;
 		var rr = sidebarInfo.box / 2; //this is a slightly bigger version of r
-		if(p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr || 
+		if(p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr ||
 		   p.y < sidebarInfo.plusX - rr || p.y > sidebarInfo.rows * sidebarInfo.box + sidebarInfo.offset
 		   || (p.x < sidebarInfo.plusX - rr && p.y < sidebarInfo.offset) || (p.x > sidebarInfo.plusX + rr && p.y < sidebarInfo.offset)){
 		    //console.log("safe");
@@ -282,7 +287,7 @@ define(function(require) {
 		    sidebarInfo.minusY - rr < p.y && p.y < sidebarInfo.minusY + rr){
 		    return -1;
 		}
-		
+
 		if( sidebarInfo.eX - rr < p.x && p.x < sidebarInfo.eX + rr &&
 		    sidebarInfo.eY - rr < p.y && p.y < sidebarInfo.eY + rr){
 		    return -2;
@@ -296,10 +301,10 @@ define(function(require) {
 		var j = dx * 5 + dy;
 		if(j >= 0)
 		    return 10+j; //very hacky coding to avoid conflicts
-		else 
+		else
 		    return 0;
 	    }
-	    
+
 	    function updateMarker(change, marker){
 		marker.strokeCap = 'round';
 		if(change == 1 && marker.strokeWidth < 30){
@@ -329,7 +334,7 @@ define(function(require) {
 	    function drawBoard(event){
 		console.log(event.point[1], event.point[2]);
 		var pt = new paper.Point(event.point[1], event.point[2]);
-		
+
 		if(event.type === 'mousedown'){
 		    mousedown(pt);
 		}
@@ -358,7 +363,7 @@ define(function(require) {
  	    }
 
 	    socket.on('boardIn', drawBoard);
-	    
+
 	},
 
         initVideo: function() {
@@ -405,13 +410,17 @@ define(function(require) {
 
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                console.log('auth: ' + this.state.get('auth'));
                 if (localStorage.hasOwnProperty('info')) {
                     console.log('we have some old data: ' + localStorage.info);
                     var info = JSON.parse(localStorage.info);
                     if(info.hasOwnProperty('id')) {
                         this.state.set(info);
-                        socket.emit('joinRoom', info.id, this.state.get('name'), this.state.get('admin'));
+                        socket.emit('joinRoom', {
+                          'id':info.id,
+                          'username':this.state.get('name'),
+                          'adminOverride':this.state.get('admin'),
+                          'SSUrl':this.state.get('SSUrl')
+                        });
                     }
                 } else {
                     this.$('#join-lecture').modal();
@@ -425,7 +434,10 @@ define(function(require) {
         updateName: function() {
             this.$('#join-lecture').modal('hide');
             this.state.set('name', this.$('.modal input[type=text]').val());
-            socket.emit('joinRoom', this.state.get('id'), this.$('.modal input[type=text]').val());
+            socket.emit('joinRoom', {
+                'id':this.state.get('id'),
+                'username':this.$('.modal input[type=text]').val()
+            });
         },
 
         // for when professor clicks a tab, send event to students
@@ -465,10 +477,16 @@ define(function(require) {
 
         nextSlide: function() {
             socket.emit('advanceSlide', 1);
+            var info = JSON.parse(localStorage.info);
+            info.SSUrl = repl(info.SSUrl, 1);
+            localStorage.info = JSON.stringify(info);
         },
 
         prevSlide: function() {
             socket.emit('advanceSlide', -1);
+            var info = JSON.parse(localStorage.info);
+            info.SSUrl = repl(info.SSUrl, -1);
+            localStorage.info = JSON.stringify(info);
         },
 
         downloadWindow: function() {

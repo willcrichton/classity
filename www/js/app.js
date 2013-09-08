@@ -55,6 +55,7 @@ define(function(require){
             state.set('auth', true);
             localStorage.info = JSON.stringify(info);
             router.navigate(info.id, {trigger: true});
+            $('#slideShowFrame').attr('src', state.get('SSUrl'));
         });
 
         socket.on('clientsChanged', function(clients) {
