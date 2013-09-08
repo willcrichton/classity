@@ -8768,6 +8768,7 @@ h1 {
 .logo h1 {
   font-size: 60px;
   margin-top: 10px;
+  margin-left: 25px;
   text-shadow: 1px 1px 2px black;
 }
 .logo h1 a {
@@ -8829,8 +8830,22 @@ h1 {
   padding-top: 3px;
   text-align: center;
 }
-.panel #column-left .tab-content #download {
-  float: right;
+.panel #column-left .tab-content .arrow {
+  height: 425px;
+  width: 75px;
+  background: url(../arrow.png) no-repeat center center;
+  position: absolute;
+  top: 0;
+  cursor: pointer;
+}
+.panel #column-left .tab-content .arrow.right {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  right: 0;
+}
+.panel #column-left .tab-content .arrow:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .panel #column-left #controls {
   text-align: center;
@@ -8886,4 +8901,11 @@ canvas {
 }
 .picker.modal-dialog {
   z-index: 10001!important;
+}
+.help-block {
+  color: #737373;
+}
+#ppt {
+  position: relative;
+  top: 5px;
 }

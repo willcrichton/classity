@@ -92,6 +92,7 @@ h1 {
 .logo h1 {
     font-size: 60px;
     margin-top: 10px;
+    margin-left: 25px;
     text-shadow: 1px 1px 2px black;
 
     a {
@@ -165,8 +166,23 @@ h1 {
                 padding-top: 3px;
                 text-align: center;
             }
-            #download {
-                float: right;
+
+            .arrow {
+                height: @contentHeight - 40;
+                width: 75px;
+                background: url(../arrow.png) no-repeat center center;
+                position: absolute;
+                top: 0;
+                cursor: pointer;
+            }
+            
+            .arrow.right {
+                .rotate(180deg);
+                right: 0;
+            }
+
+            .arrow:hover {
+                background-color: rgba(255, 255, 255, 0.1);
             }
         }
 
@@ -241,4 +257,13 @@ canvas {
 
 .picker.modal-dialog {
     z-index: 10001!important;
+}
+
+.help-block {
+    color: #737373;
+}
+
+#ppt {
+    position: relative;
+    top: 5px;
 }

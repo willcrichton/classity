@@ -1,6 +1,7 @@
 <% if (admin) { %>
 
 <button type="button" class="btn btn-lg btn-primary" id="admin-question" data-toggle="modal" href="#admin-modal">Pose a question <i class="glyphicon glyphicon-question-sign"></i></button>
+<button type="button" class="btn btn-lg btn-default" id="admin-question" data-toggle="modal" href="#share-modal">Share the link <i class="glyphicon glyphicon-send"></i></button>
 
 <div class="modal" id="admin-modal">
   <div class="modal-dialog">
@@ -46,6 +47,24 @@
         <p>Prompt: <span id="results-prompt"></span></p>
         <ol id="results-answers"></ol>
         <canvas id="results-chart" width="520" height="200"></canvas>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="share-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Share the link</h4>
+      </div>
+      <div class="modal-body">
+        <p>Your code is: <strong><%= id %></strong>.<br />
+        The full link: <strong><%= document.baseURI %></strong>.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

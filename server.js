@@ -98,11 +98,13 @@ function join(socket, admin) {
             SSUrl = args.SSUrl;
         }
 
+        var prof = getProf(id);
 	socket.emit('joinedRoom', {
             'id':args.id,
             'admin':socket.admin,
             'clients': usernames(args.id),
             'profVideo': profVideo(args.id),
+            'profName': prof ? prof.username : '',
             'name': args.username,
             'SSUrl': SSUrl
         });

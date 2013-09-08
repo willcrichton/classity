@@ -1,12 +1,12 @@
 <div class="shout">
   <div class="container">
     <div class="bg">
-      <h1>Real-time lectures on the web</h1>
+      <h1>Real-time lectures on the web.</h1>
       <div class="row">
         <div class="col-md-2">
           <button class="btn btn-success" data-toggle="modal" href="#modal"><i class="glyphicon glyphicon-plus"></i> Create a new lecture</button>
         </div>
-        <div class="col-md-1" style="margin-left:60px;font-size:26px;"> OR </div>
+        <div class="col-md-1" style="margin-left:70px;font-size:26px;"> OR </div>
         <div class="col-md-3">
           <div class="input-group">
             <input class="form-control" type="text" placeholder="Lecture #" id="id">
@@ -45,9 +45,17 @@
         <h4 class="modal-title">Lecture settings</h4>
       </div>
       <div class="modal-body">
-        <input type="text" placeholder="Your name" id="name"><br /><br />
-        To use a PowerPoint, load it from your Google Drive.<br />
-        <button class="btn" id="pick">Choose PPT</button> <span id="ppt"></span>
+        <div class="form-group">
+          <label for="name">Your name</label>
+          <input type="text" class="form-control" placeholder="Your name" id="name">
+        </div>
+        <div class="form-group">
+          <label for="slides">Slides (not required)</label>
+          <div class="row" style="margin: 0;">
+            <button class="btn col-md-6" id="pick">Choose PPT</button> <div class="col-md-6" id="ppt"></div>
+          </div>
+          <p class="help-block">To use a PowerPoint, load it from your Google Drive.</p>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" id="new" data-dismiss="modal">Create</button>

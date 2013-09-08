@@ -18,8 +18,8 @@ define(function(require) {
         events: {
             'click #name-update' : 'updateName',
             'click .nav-tabs a'  : 'updateTab',
-            'click #next'        : 'nextSlide',
-            'click #prev'        : 'prevSlide',
+            'click .arrow.right' : 'nextSlide',
+            'click .arrow.left'  : 'prevSlide',
             'click #download'    : 'downloadWindow',
             'submit #chatbox'    : 'chat',
             'submit #join-form'  : 'updateName',
@@ -42,7 +42,7 @@ define(function(require) {
         updateClients: function() {
             this.$('#clients').html('');
             _.forEach(this.state.get('clients'), function(client) {
-                if (client === this.state.get('name')) {
+                if (client === this.state.get('name') || client == this.state.get('profName')) {
                     return;
                 }
 
@@ -137,28 +137,29 @@ define(function(require) {
 			point: event.point
 		       };
 	    }
-            function mousedown(point) {
-		// Add a segment to the path at the position of the mouse:
-		//var point = new paper.Point(event.point[1], event.point[2]);
-		//console.log(point);
-		numPaths++;
-		paths[numPaths] = new paper.Path();
 
-		switchMarker(paths[numPaths], marker);
-		console.log(specialPoints(point));
-		if(specialPoints(point) == 0)
+            function mousedown(point) {
+		        // Add a segment to the path at the position of the mouse:
+		        //var point = new paper.Point(event.point[1], event.point[2]);
+		        //console.log(point);
+		        numPaths++;
+		        paths[numPaths] = new paper.Path();
+
+		        switchMarker(paths[numPaths], marker);
+		        console.log(specialPoints(point));
+		        if(specialPoints(point) == 0)
                     paths[numPaths].add(point);
-		else{
-		    updateMarker(specialPoints(point), marker);
+		        else{
+		            updateMarker(specialPoints(point), marker);
 		            switchMarker(paths[numPaths], marker);
-		}
-		paper.view.draw();
-		console.log("start...");
-	    }
+		        }
+		        paper.view.draw();
+		        console.log("start...");
+	        }
 
 
             function mousedrag(point) {
-		//var point = new paper.Point(event.1, event.2);
+		        //var point = new paper.Point(event.1, event.2);
                 //Continue adding segments to path at position of mouse:
 		if(specialPoints(point) == 0)
 		    paths[numPaths].add(point);
@@ -174,18 +175,19 @@ define(function(require) {
 	    }
 
             function mouseup(point) {
-		//var point = new paper.Point(event.1, event.2);
+		        //var point = new paper.Point(event.1, event.2);
                 //Should stop tracking points;
-		if(specialPoints(point) == 0)
+		        if(specialPoints(point) == 0)
                 {
-		    paths[numPaths].add(point);
-		    if(paths[numPaths].segments.length < 4)
-		    {
-			paths[numPaths].add(new paper.Point(point.x + 1, point.y));
-		    }
-		}
-		paper.view.draw();
-		console.log("done!...");
+		            paths[numPaths].add(point);
+		            if(paths[numPaths].segments.length < 4)
+		            {
+			            paths[numPaths].add(new paper.Point(point.x + 1, point.y));
+		            }
+		        }
+
+		        paper.view.draw();
+		        console.log("done!...");
             }
 
 
@@ -203,8 +205,8 @@ define(function(require) {
 	    }
 
             tool.onMouseUp = function(event) {
-		mouseup(event.point);
-		sendBoard(mouseevent(event));
+		        mouseup(event.point);
+		        sendBoard(mouseevent(event));
             }
 
 	    function switchMarker(myPath, marker){
@@ -377,7 +379,7 @@ define(function(require) {
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
 
-            var w = 550, h = 465;
+            var w = 920, h = 465;
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
                     socket.emit('videoId', session.connection.connectionId);
@@ -536,7 +538,7 @@ define(function(require) {
                 this.$('#column-right div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
-                this.$('#ssbuttonsHider').hide();
+                this.$('.arrow').hide();
             }
 
             return this;
