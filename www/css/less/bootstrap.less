@@ -64,15 +64,15 @@
 // CUSTOM SHIT FROM WILL
 
 @borderColor: #ccc;
-@contentHeight: 465px;
+@contentHeight: 575px;
 
 @font-face {
     font-family: 'derivia';
     src: url('../fonts/derivia-webfont.eot');
     src: url('../fonts/derivia-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/derivia-webfont.woff') format('woff'),
-         url('../fonts/derivia-webfont.ttf') format('truetype'),
-         url('../fonts/derivia-webfont.svg#deriviaregular') format('svg');
+    url('../fonts/derivia-webfont.woff') format('woff'),
+    url('../fonts/derivia-webfont.ttf') format('truetype'),
+    url('../fonts/derivia-webfont.svg#deriviaregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -87,6 +87,41 @@ body, html {
 
 h1 {
     font-family: 'derivia', serif;
+}
+
+.btn {
+    transition: all 0.1s ease-in-out;
+}
+
+nav {
+    padding-top: 8px;
+
+    a {
+        display: block;
+        text-align: center;
+        padding-top: 22px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        border: 2px solid white;
+        float: left;
+        transition: all 0.2s linear;
+        font: bold 20px 'derivia';
+        color: white;
+        margin-right: 15px;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    a:hover, a.active {
+        background: rgba(255, 255, 255, 0.3);
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    a.active {
+        box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.5);
+    }
 }
 
 .logo h1 {
@@ -121,116 +156,131 @@ h1 {
     }
 }
 
-.panel {
-    height: 600px;
+.popover {
+    color: black;
+}
 
-    #column-left {
-        height: 570px;
-        border-right: 1px solid @borderColor;
-        margin-right: -1px;
-        position: relative;
 
-        .nav-tabs {
-            margin-bottom:10px;
-            border-bottom: 1px solid @borderColor;
+#column-left {
+    height: 570px;
+    border-right: 1px solid @borderColor;
+    margin-right: -1px;
+    position: relative;
 
-            .active {
-                a {
-                    background: rgba(255, 255, 255, 0.2);
-                    color: white;
-                }
-            }
-        }
+    .nav-tabs {
+        margin-bottom:10px;
+        border-bottom: 1px solid @borderColor;
 
-        .tab-content {
-            height: @contentHeight;
-            margin-bottom: 10px;
-
-            .tab-pane {
-                position: relative;
-            }
-
-            iframe {
-                height: @contentHeight;
-                border: none;
-                margin-left: 80px;
-            }
-
-            #ssbuttons {
-                position: absolute;
-                bottom: -6px;
-                left: 80px;
-                width: 761px;
-                background: #9bb6c7;
-                padding-top: 3px;
-                text-align: center;
-            }
-
-            #download {
-                position: absolute;
-                top: 0;
-                right: 0;
-            }
-        }
-
-        #controls {
-            text-align: center;
-
-            .modal {
-                text-align: left;
-            }
-        }
-        
-        #notification {
-            position: absolute;
-            top: 7px;
-            right: 15px;
-            display: none;
-
-            span {
-                color: yellow;
+        .active {
+            a {
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
             }
         }
     }
 
-    #column-right {
-        .box:first-child {
-            margin-bottom: 5px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid @borderColor;
+    .tab-content {
+        height: @contentHeight;
+        margin-bottom: 10px;
+        margin-top: 10px;
+
+        .tab-pane {
+            position: relative;
+        }
+
+        iframe {
+            height: @contentHeight;
+            border: none;
+            margin-left: 80px;
+        }
+
+        #ssbuttons {
+            position: absolute;
+            bottom: -6px;
+            left: 80px;
+            width: 761px;
+            background: #9bb6c7;
+            padding-top: 3px;
+            text-align: center;
+        }
+
+        .arrow {
+            height: @contentHeight - 40;
+            width: 75px;
+            background: url(../arrow.png) no-repeat center center;
+            position: absolute;
+            top: 0;
+            cursor: pointer;
         }
         
-        h2 {
-            margin-top: 5px;
-            margin-bottom: 5px;
-            transition: all 0.3s ease-in;
+        .arrow.right {
+            .rotate(180deg);
+            right: 0;
         }
 
-        input[type=text] {
-            width: 100%;
+        .arrow:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
+    }
+
+    #controls {
+        text-align: center;
+
+        .modal {
+            text-align: left;
+        }
+    }
+    
+    #notification {
+        position: absolute;
+        top: -55px;
+        right: 34px;
+        display: none;
+
+        span {
+            color: yellow;
+        }
+    }
+}
+
+#column-right {
+    .box:first-child {
+        margin-bottom: 5px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid @borderColor;
+    }
+    
+    h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        transition: all 0.3s ease-in;
+        font-size: 30px;
+    }
+
+    input[type=text] {
+        width: 100%;
+    }
+    
+    #chats {
+        width: 100%;
+        height: @contentHeight / 2.5;
+        margin-bottom: 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        font-size: 14px;
+    }
+
+    #clients {
+        height: 280px;
+        margin-bottom: 0;
         
-        #chats {
-            width: 100%;
-            height: @contentHeight / 2.5;
-            margin-bottom: 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            font-size: 14px;
+        .question {
+            cursor: pointer;
         }
+    }
 
-        #clients {
-            height: 280px;
-            margin-bottom: 0;
-            
-            .question {
-                cursor: pointer;
-            }
-        }
-
-        #clients.tall {
-            height: 510px;
-        }
+    #clients.tall {
+        height: 480px;
     }
 }
 
@@ -244,4 +294,13 @@ canvas {
 
 .picker.modal-dialog {
     z-index: 10001!important;
+}
+
+.help-block {
+    color: #737373;
+}
+
+#ppt {
+    position: relative;
+    top: 5px;
 }

@@ -12,7 +12,7 @@ define(function(require) {
             'click #answer-question' : 'answerQuestion',
             'click #pose-question'   : 'poseQuestion',
             'click #add-answer'      : 'addAnswer',
-            'click .remove-answer'   : 'removeAnswer'
+            'click .remove-answer'   : 'removeAnswer',
         },
 
         initialize: function(options) {
@@ -110,6 +110,12 @@ define(function(require) {
             this.$el.html(this.template(this.state.toJSON()));
             if (this.$('#results-chart').length) {
                 this.chart = new Chart(this.$('#results-chart')[0].getContext('2d'));
+            } else {
+                this.$el.css({
+                    position: 'absolute',
+                    top: '-68px',
+                    left: '-410px'
+                });
             }
             
             this.addAnswer();

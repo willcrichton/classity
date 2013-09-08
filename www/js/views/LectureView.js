@@ -7,14 +7,18 @@ define(function(require) {
     template = require('text!templates/lecture.tpl'),
     ControlsView = require('views/ControlsView');
 
+    function repl(str, num) {
+        var d = parseInt(str.match(/#slide=(\d+)/)[1]);
+        return str.replace(/#slide=\d+/, '#slide=' + (Math.max(1, d+num)));
+    }
+
     return Backbone.View.extend({
         id: 'lecture',
 
         events: {
             'click #name-update' : 'updateName',
-            'click .nav-tabs a'  : 'updateTab',
-            'click #next'        : 'nextSlide',
-            'click #prev'        : 'prevSlide',
+            'click .arrow.right' : 'nextSlide',
+            'click .arrow.left'  : 'prevSlide',
             'click #download'    : 'downloadWindow',
             'submit #chatbox'    : 'chat',
             'submit #join-form'  : 'updateName',
@@ -37,7 +41,7 @@ define(function(require) {
         updateClients: function() {
             this.$('#clients').html('');
             _.forEach(this.state.get('clients'), function(client) {
-                if (client === this.state.get('name')) {
+                if (client === this.state.get('name') || client == this.state.get('profName')) {
                     return;
                 }
 
@@ -119,7 +123,7 @@ define(function(require) {
 	    var canDraw = this.state.get("admin");
 	  //  var canDraw = true
 	    var marker = {
-		strokeColor: 'black', 
+		strokeColor: 'black',
 		strokeWidth: '2',
 		strokeCap: 'round',
 		oldWidth: '2',
@@ -131,7 +135,7 @@ define(function(require) {
 		plusX: 75,
 		plusY: 75,
 	    };
-	    
+
 	    var sidebarInfo = {
 		radius: originInfo.radius,
 		box: originInfo.box,
@@ -159,6 +163,7 @@ define(function(require) {
 			point: event.point
 		       };
 	    }
+
             function mousedown(point) {
 		// Add a segment to the path at the position of the mouse:
 		//var point = new paper.Point(event.point[1], event.point[2]);
@@ -178,9 +183,8 @@ define(function(require) {
 		console.log("start...");
 	    }
 	    
-	    
             function mousedrag(point) {
-		//var point = new paper.Point(event.1, event.2);
+		        //var point = new paper.Point(event.1, event.2);
                 //Continue adding segments to path at position of mouse:
 		if(specialPoints(point) == 0)
 		    boards[current][boards[current].length-1].add(point);
@@ -193,11 +197,11 @@ define(function(require) {
 		paper.view.draw();
 		console.log("drawing...");
 	    }
-	    
+
             function mouseup(point) {
-		//var point = new paper.Point(event.1, event.2);
+		        //var point = new paper.Point(event.1, event.2);
                 //Should stop tracking points;
-		if(specialPoints(point) == 0)
+		        if(specialPoints(point) == 0)
                 {
 		    boards[current][boards[current].length-1].add(point);
 		    if(boards[current][boards[current].length-1].segments.length < 4)
@@ -218,7 +222,7 @@ define(function(require) {
 		}
 		
 	    }
-	    
+
             tool.onMouseDrag = function(event) {
                 //Continue adding segments to path at position of mouse:
 		if(canDraw){
@@ -226,28 +230,25 @@ define(function(require) {
 		    sendBoard(mouseevent(event));
 		}
 	    }
-	    
+
             tool.onMouseUp = function(event) {
 		if(canDraw){
 		    mouseup(event.point);
 		    sendBoard(mouseevent(event));
 		}
             }
-	    
 
 	    function switchMarker(myPath, marker){
 		myPath.strokeColor = marker.strokeColor;
 		myPath.strokeWidth = marker.strokeWidth;
 		myPath.strokeCap = marker.strokeCap;
 	    }
-	    
+
 	    function drawRoundedSquare(corner, size){
 		var rectangle = new paper.Rectangle(corner, size);
 		var cornerSize = new paper.Size(5, 5);
 		return new paper.Path.Rectangle(rectangle, cornerSize);
 	    }
-	    
-	    
 
 	    function drawSidebar(sidebarInfo){
 		var strokeColor = 'black';
@@ -328,10 +329,9 @@ define(function(require) {
 		    ipath[i] = drawRoundedSquare(new paper.Point(col, row), new paper.Size(side, side));
 		    ipath[i].fillColor = sidebarInfo.color[i];
 		}
-		
 	    }
-	    
-	    
+
+
 	    function specialPoints(p){
 		var r = sidebarInfo.radius;
 		var rr = sidebarInfo.box / 2; //this is a slightly bigger version of r
@@ -353,7 +353,7 @@ define(function(require) {
 		    sidebarInfo.minusY - rr < p.y && p.y < sidebarInfo.minusY + rr){
 		    return -1;
 		}
-		
+
 		if( sidebarInfo.eX - rr < p.x && p.x < sidebarInfo.eX + rr &&
 		    sidebarInfo.eY - rr < p.y && p.y < sidebarInfo.eY + rr){
 		    return -2;
@@ -381,10 +381,10 @@ define(function(require) {
 		var j = dx * 5 + dy;
 		if(j >= 0)
 		    return 10+j; //very hacky coding to avoid conflicts
-		else 
+		else
 		    return 0;
 	    }
-	    
+
 	    function updateMarker(change, marker){
 		marker.strokeCap = 'round';
 		if(change == 1 && marker.strokeWidth < 30){
@@ -468,7 +468,6 @@ define(function(require) {
 	    if(canDraw){
 		drawSidebar(sidebarInfo);
  	    }
-	    
 	    socket.on('boardIn', drawBoard);
 	},
 
@@ -512,7 +511,7 @@ define(function(require) {
             session.addEventListener('streamCreated', streamCreatedHandler.bind(this));
             session.connect(apiKey, token);
 
-            var w = 550, h = 465;
+            var w = 920, h = 575;
             function sessionConnectedHandler(event) {
                 if (this.state.get('admin')) {
                     socket.emit('videoId', session.connection.connectionId);
@@ -538,20 +537,23 @@ define(function(require) {
         initPresentation: function() {
             if (this.state.get('SSUrl') && this.state.get('SSUrl').indexOf('undefined') === -1) {
                 this.$('iframe').attr('src', this.state.get('SSUrl'));
-            } else {
-                $('#presentation, a[href=#presentation]').hide();
-            }
+                $('#presentation, a[href=#presentation]').show();
+            } 
         },
 
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                console.log('auth: ' + this.state.get('auth'));
                 if (localStorage.hasOwnProperty('info')) {
                     console.log('we have some old data: ' + localStorage.info);
                     var info = JSON.parse(localStorage.info);
                     if(info.hasOwnProperty('id')) {
                         this.state.set(info);
-                        socket.emit('joinRoom', info.id, this.state.get('name'), this.state.get('admin'));
+                        socket.emit('joinRoom', {
+                          'id':info.id,
+                          'username':this.state.get('name'),
+                          'adminOverride':this.state.get('admin'),
+                          'SSUrl':this.state.get('SSUrl')
+                        });
                     }
                 } else {
                     this.$('#join-lecture').modal();
@@ -565,7 +567,10 @@ define(function(require) {
         updateName: function() {
             this.$('#join-lecture').modal('hide');
             this.state.set('name', this.$('.modal input[type=text]').val());
-            socket.emit('joinRoom', this.state.get('id'), this.$('.modal input[type=text]').val());
+            socket.emit('joinRoom', {
+                'id':this.state.get('id'),
+                'username':this.$('.modal input[type=text]').val()
+            });
         },
 
         // for when professor clicks a tab, send event to students
@@ -577,7 +582,7 @@ define(function(require) {
 
         // for when we receive tab change from professor
         changeTab: function() {
-            this.$('.nav-tabs a[href=#' + this.state.get('tab') + ']').tab('show');
+            $('nav a[href=#' + this.state.get('tab') + ']').tab('show');
         },
 
         chat: function(e) {
@@ -605,10 +610,16 @@ define(function(require) {
 
         nextSlide: function() {
             socket.emit('advanceSlide', 1);
+            var info = JSON.parse(localStorage.info);
+            info.SSUrl = repl(info.SSUrl, 1);
+            localStorage.info = JSON.stringify(info);
         },
 
         prevSlide: function() {
             socket.emit('advanceSlide', -1);
+            var info = JSON.parse(localStorage.info);
+            info.SSUrl = repl(info.SSUrl, -1);
+            localStorage.info = JSON.stringify(info);
         },
 
         downloadWindow: function() {
@@ -652,13 +663,41 @@ define(function(require) {
                 state: this.state
             });
 
-            this.$('.nav-tabs').tab();
+            $('.logo > .row > *').css('display', 'block');
+            var self = this;
+            $('nav a').click(function(e) {
+                e.preventDefault();
+                if (!$(this).hasClass('pull-right')) {
+                    $('nav a').removeClass('active');
+                    $(this).addClass('active');
+                    $(this).tab('show');
+                    self.updateTab(e);
+                }
+            });
+
+            $('nav .pull-right').popover({placement: 'bottom'});
+            $('nav .pull-right').attr('data-clipboard-text', document.baseURI);
+            var clip = new ZeroClipboard($('nav .pull-right')[0], {
+                moviePath: '/js/vendor/ZeroClipboard.swf'
+            });
+
+            var opened = false;
+            clip.on('mousedown', function() {
+                if (!opened) {
+                    $('nav .pull-right').popover('show');
+                } else {
+                    $('nav .pull-right').popover('hide');
+                }
+                opened = !opened;
+            });
+
+            this.$('#chatbox input').attr('placeholder', this.state.get('name') + ':');
 
             if (this.state.get('admin')) {
-                this.$('#column-right div:first-child').hide();
+                this.$('#column-right > div:first-child').hide();
                 this.$('#clients').addClass('tall');
             } else {
-                this.$('#ssbuttonsHider').hide();
+                this.$('.arrow').hide();
             }
 
             return this;
