@@ -89,7 +89,7 @@ function join(socket, admin) {
         }
 
         var SSUrl;
-        if(args.SSUrl === undefined || args.SSUrl === "undefined") {
+        if(args.SSUrl === undefined || args.SSUrl === null) {
             SSUrl = profSSUrl(args.id);
         } else {
             var theMatch = args.SSUrl.match(/(.*)#slide=(\d+)$/);
