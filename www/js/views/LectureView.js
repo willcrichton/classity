@@ -1,7 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var 
+    var
     _        = require('Underscore'),
     Backbone = require('Backbone'),
     template = require('text!templates/lecture.tpl'),
@@ -21,7 +21,7 @@ define(function(require) {
         initialize: function(options) {
             this.template = _.template(template);
             this.state = this.options.state;
-            
+            this.listenTo(this.state, 'change:clients', this.updateClients);
             this.listenTo(this.state, 'change:clients change:questions change:answers', this.updateClients);
             this.listenTo(this.state, 'change:auth change:profVideo', this.render);
             this.listenTo(this.state, 'change:tab', this.changeTab);
@@ -93,7 +93,7 @@ define(function(require) {
             var tool = new paper.Tool();
             var myPath;
 	    var marker = {
-		strokeColor: 'black', 
+		strokeColor: 'black',
 		strokeWidth: '4',
 		strokeCap: 'round',
 		oldWidth: '2',
@@ -105,7 +105,7 @@ define(function(require) {
 		plusX: 75,
 		plusY: 75,
 	    };
-	    
+
 	    var sidebarInfo = {
 		radius: originInfo.radius,
 		box: originInfo.box,
@@ -191,11 +191,11 @@ define(function(require) {
 		var incpath = drawRoundedSquare(new paper.Point(sidebarInfo.plusX - r, sidebarInfo.plusY - r) ,
 						new paper.Size(side, side));
 		incpath.strokeColor = strokeColor;
-		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5); 
-		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2); 
+		var circbg = new paper.Path.Circle(new paper.Point(sidebarInfo.plusX, sidebarInfo.plusY), 5);
+		var circsm = new paper.Path.Circle(new paper.Point(sidebarInfo.minusX, sidebarInfo.minusY), 2);
 		circbg.strokeColor = strokeColor;
 		circsm.strokeColor = strokeColor;
-    
+
 		//Draws small.
 		var decpath = drawRoundedSquare(new paper.Point(sidebarInfo.minusX - r, sidebarInfo.minusY - r),
 						new paper.Size(side, side));
@@ -230,7 +230,7 @@ define(function(require) {
 	    function specialPoints(p){
 		var r = sidebarInfo.radius;
 		var rr = sidebarInfo.box / 2; //this is a slightly bigger version of r
-		if(p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr || 
+		if(p.x < sidebarInfo.sca1 - rr || p.x > sidebarInfo.sca2 + rr ||
 		   p.y < sidebarInfo.plusX - rr || p.y > sidebarInfo.rows * sidebarInfo.box + sidebarInfo.offset
 		   || (p.x < sidebarInfo.plusX - rr && p.y < sidebarInfo.offset) || (p.x > sidebarInfo.plusX + rr && p.y < sidebarInfo.offset)){
 		    //console.log("safe");
@@ -261,10 +261,10 @@ define(function(require) {
 		var j = dx * 5 + dy;
 		if(j >= 0)
 		    return 10+j; //very hacky coding to avoid conflicts
-		else 
+		else
 		    return 0;
 	    }
-	    
+
 	    function updateMarker(change, marker){
 		marker.strokeCap = 'round';
 		if(change == 1 && marker.strokeWidth < 30){
@@ -293,7 +293,7 @@ define(function(require) {
 
 	    drawSidebar(sidebarInfo);
 //            paper.view.draw();
- 
+
 	    // function sendBoard(){
 	    // 	socket.emit("board", bigArray, .. );
 	    // }
@@ -314,7 +314,7 @@ define(function(require) {
 	    var apiKey = "40476162";
             var sessionId = "1_MX40MDQ3NjE2Mn4xMjcuMC4wLjF-RnJpIFNlcCAwNiAxOToxOToxMyBQRFQgMjAxM34wLjU0Mzk3NjF-";
             var token = "T1==cGFydG5lcl9pZD00MDQ3NjE2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz02NDE3YTI3YjhkMDhkNmYwMDAxOTUwZGZkYmZiODNjMTM1NjliNmFjOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDQwTURRM05qRTJNbjR4TWpjdU1DNHdMakYtUm5KcElGTmxjQ0F3TmlBeE9Ub3hPVG94TXlCUVJGUWdNakF4TTM0d0xqVTBNemszTmpGLSZjcmVhdGVfdGltZT0xMzc4NTIwMzUzJm5vbmNlPTAuMzU2ODIwNjI1MjY5ODU1NiZleHBpcmVfdGltZT0xMzc4NjA2NzUzJmNvbm5lY3Rpb25fZGF0YT0=";
-            
+
             // Initialize session, set up event listeners, and connect
             var session = TB.initSession(sessionId);
             session.addEventListener('sessionConnected', sessionConnectedHandler.bind(this));
@@ -357,7 +357,17 @@ define(function(require) {
 
         checkPermissions: function() {
             if (!this.state.get('admin') && !this.state.get('auth') && !this.state.get('profVideo')) {
-                this.$('#join-lecture').modal();
+                console.log('auth: ' + this.state.get('auth'));
+                if (localStorage.hasOwnProperty('info')) {
+                    console.log('we have some old data: ' + localStorage.info);
+                    var info = JSON.parse(localStorage.info);
+                    if(info.hasOwnProperty('id')) {
+                        this.state.set(info);
+                        socket.emit('joinRoom', info.id, this.state.get('name'));
+                    }
+                } else {
+                    this.$('#join-lecture').modal();
+                }
                 return false;
             }
 
