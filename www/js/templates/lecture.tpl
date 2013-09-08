@@ -19,8 +19,11 @@
                 <iframe id = "slideShowFrame" class="col-md-10"></iframe>  
               </div>
               <div id = "ssbuttons">
-                <button type="button" id="prev" class="btn">Previous</button> 
-                <button type="button" id="next" class="btn">Next</button>
+                <div id = "ssbuttonsHider">
+                  <button type="button" id="prev" class="btn">Previous</button> 
+                  <button type="button" id="next" class="btn">Next</button>
+                </div>
+                <button type="button" id="download" class="btn">Download Slideshow</button>
               </div>
             </div>
           </div>

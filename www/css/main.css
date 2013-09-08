@@ -8829,6 +8829,9 @@ h1 {
   padding-top: 3px;
   text-align: center;
 }
+.panel #column-left .tab-content #download {
+  float: right;
+}
 .panel #column-left #controls {
   text-align: center;
 }
